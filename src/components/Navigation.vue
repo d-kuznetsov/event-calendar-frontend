@@ -11,7 +11,7 @@ import { useStore } from "../store";
 export default {
   setup() {
     const store = useStore();
-    const isLoggedIn = computed(() => !!store.state.user);
+    const isLoggedIn = computed(() => store.getters.isLoggedIn);
     return {
       isLoggedIn,
     };

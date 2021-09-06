@@ -22,4 +22,28 @@ export const store = createStore<State>({
       user: null,
     };
   },
+  getters: {
+    isLoggedIn(state) {
+      return !!state.user;
+    },
+  },
+  mutations: {
+    setUser(state, user) {
+      state.user = user;
+    },
+    removeUser(state) {
+      state.user = null;
+    },
+  },
+  actions: {
+    register({ commit }, user) {
+      commit("setUser", user);
+    },
+    login({ commit }, user) {
+      commit("setUser", user);
+    },
+    logout({ commit }) {
+      commit("removeUser");
+    },
+  },
 });
