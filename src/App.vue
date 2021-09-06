@@ -367,9 +367,11 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100%;
-    width: 300px;
     margin: 0 auto;
     background: white;
+    @media (min-width: $bp-xl) {
+      max-width: $bp-xl;
+    }
   }
 
   &__header {

@@ -1,3 +1,9 @@
+const variables = require("./vars.config");
+
 module.exports = {
-  plugins: [require("autoprefixer"), require("postcss-nested")],
+  plugins: [
+    require("postcss-simple-vars")({ variables }),
+    require("autoprefixer"),
+    require("postcss-nested"),
+  ],
 };
