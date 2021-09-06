@@ -1,5 +1,6 @@
 import { InjectionKey } from "vue";
 import { createStore, useStore as baseUseStore, Store } from "vuex";
+import service from "./service";
 
 interface User {
   name: string;
@@ -36,11 +37,15 @@ export const store = createStore<State>({
     },
   },
   actions: {
-    register({ commit }, user) {
-      commit("setUser", user);
+    register({ commit }, userData) {
+      return service.register(userData).then((user) => {
+        commit("setUser", user);
+      });
     },
-    login({ commit }, user) {
-      commit("setUser", user);
+    login({ commit }, credentials) {
+      return service.login(credentials).then((user) => {
+        commit("setUser", user);
+      });
     },
     logout({ commit }) {
       commit("removeUser");
