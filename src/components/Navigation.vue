@@ -1,7 +1,7 @@
 <template>
   <div class="Navigation">
     <button v-if="isLoggedIn" @click="handleLogoutClick">Logout</button>
-    <button v-else @click="handleLoginClick">Logout</button>
+    <button v-else @click="handleLoginClick">Login</button>
   </div>
 </template>
 <script>
