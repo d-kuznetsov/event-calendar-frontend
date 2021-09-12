@@ -1,7 +1,6 @@
 <template>
   <div class="Navigation">
     <button v-if="isLoggedIn" @click="handleLogoutClick">Logout</button>
-    <button v-else @click="handleLoginClick">Login</button>
   </div>
 </template>
 <script>
@@ -15,14 +14,6 @@ export default {
     const router = useRouter();
     const isLoggedIn = computed(() => store.getters.isLoggedIn);
 
-    const handleLoginClick = () => {
-      const testUser = {
-        name: "Katya",
-        password: "12345",
-      };
-      store.dispatch("login", testUser);
-      router.push("/calendar");
-    };
     const handleLogoutClick = () => {
       store.dispatch("logout");
       router.push("/login");
@@ -30,7 +21,6 @@ export default {
 
     return {
       isLoggedIn,
-      handleLoginClick,
       handleLogoutClick,
     };
   },
