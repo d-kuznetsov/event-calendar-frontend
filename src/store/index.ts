@@ -1,69 +1,73 @@
-import { InjectionKey } from "vue";
-import { createStore, useStore as baseUseStore, Store } from "vuex";
+import { createStore as createVuexStore, useStore as baseUseStore } from "vuex";
 import createPersistedState from "vuex-persistedstate";
-import service from "./service";
+import { InjectionKey, State, IService } from "./types";
+import Service from "./service";
 
-interface User {
-  name: string;
-}
-
-export interface State {
-  user: User | null;
-  token: string | null;
-}
-
-export const key: InjectionKey<Store<State>> = Symbol();
+export const key: InjectionKey = Symbol();
 
 export function useStore() {
   return baseUseStore(key);
 }
 
-export const store = createStore<State>({
-  state() {
-    return {
-      user: null,
-      token: null,
-    };
-  },
-  getters: {
-    isLoggedIn(state) {
-      return !!state.user;
+function createStore(service: IService) {
+  return createVuexStore<State>({
+    state() {
+      return {
+        user: null,
+        events: [],
+        token: null,
+      };
     },
-  },
-  mutations: {
-    setUser(state, user) {
-      state.user = user;
+    getters: {
+      isLoggedIn(state) {
+        return !!state.user;
+      },
     },
-    removeUser(state) {
-      state.user = null;
+    mutations: {
+      setUser(state, user) {
+        state.user = user;
+      },
+      removeUser(state) {
+        state.user = null;
+      },
+      setToken(state, token) {
+        state.token = token;
+      },
+      removeToken(state) {
+        state.token = null;
+      },
+      setEvents(state, events) {
+        state.events = events;
+      },
     },
-    setToken(state, token) {
-      state.token = token;
+    actions: {
+      register({ commit }, userData) {
+        return service.register(userData).then(({ name, token }) => {
+          commit("setToken", token);
+          commit("setUser", { name });
+        });
+      },
+      login({ commit }, credentials) {
+        return service.login(credentials).then(({ name, token }) => {
+          commit("setToken", token);
+          commit("setUser", { name });
+        });
+      },
+      logout({ commit }) {
+        commit("removeToken");
+        commit("removeUser");
+      },
+      fetchEvents({ state, commit }) {
+        return service.fetchUserEvents(state.token).then((events) => {
+          commit("setEvents", events);
+        });
+      },
     },
-    removeToken(state) {
-      state.token = null;
-    },
-  },
-  actions: {
-    register({ commit }, userData) {
-      return service.register(userData).then(({ name, token }) => {
-        commit("setToken", token);
-        commit("setUser", { name });
-      });
-    },
-    login({ commit }, credentials) {
-      return service.login(credentials).then(({ name, token }) => {
-        commit("setToken", token);
-        commit("setUser", { name });
-      });
-    },
-    logout({ commit }) {
-      commit("removeToken");
-      commit("removeUser");
-    },
-  },
-  plugins: [createPersistedState()],
-});
+    plugins: [createPersistedState()],
+  });
+}
+
+export const store = createStore(new Service());
 
 store.subscribe((m, s) => {
   console.log(m);
