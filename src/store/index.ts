@@ -5,7 +5,6 @@ import service from "./service";
 
 interface User {
   name: string;
-  email: string;
 }
 
 export interface State {
@@ -47,16 +46,15 @@ export const store = createStore<State>({
   },
   actions: {
     register({ commit }, userData) {
-      return service.register(userData).then((token) => {
+      return service.register(userData).then(({ name, token }) => {
         commit("setToken", token);
-        commit("setUser", userData);
+        commit("setUser", { name });
       });
     },
     login({ commit }, credentials) {
-      return service.login(credentials).then((token) => {
-        debugger;
+      return service.login(credentials).then(({ name, token }) => {
         commit("setToken", token);
-        commit("setUser", credentials);
+        commit("setUser", { name });
       });
     },
     logout({ commit }) {
