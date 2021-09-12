@@ -10,6 +10,7 @@ interface User {
 
 export interface State {
   user: User | null;
+  token: string | null;
 }
 
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -22,6 +23,7 @@ export const store = createStore<State>({
   state() {
     return {
       user: null,
+      token: null,
     };
   },
   getters: {
@@ -36,21 +38,36 @@ export const store = createStore<State>({
     removeUser(state) {
       state.user = null;
     },
+    setToken(state, token) {
+      state.token = token;
+    },
+    removeToken(state) {
+      state.token = null;
+    },
   },
   actions: {
     register({ commit }, userData) {
-      return service.register(userData).then((user) => {
-        commit("setUser", user);
+      return service.register(userData).then((token) => {
+        commit("setToken", token);
+        commit("setUser", userData);
       });
     },
     login({ commit }, credentials) {
-      return service.login(credentials).then((user) => {
-        commit("setUser", user);
+      return service.login(credentials).then((token) => {
+        debugger;
+        commit("setToken", token);
+        commit("setUser", credentials);
       });
     },
     logout({ commit }) {
+      commit("removeToken");
       commit("removeUser");
     },
   },
   plugins: [createPersistedState()],
+});
+
+store.subscribe((m, s) => {
+  console.log(m);
+  console.log(JSON.stringify(s, null, 2));
 });
