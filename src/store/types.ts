@@ -18,6 +18,7 @@ export interface State {
   user: User | null;
   events: Array<Event>;
   token: string | null;
+  period: [string, string];
 }
 
 export type InjectionKey = VueInjectionKey<Store<State>>;
