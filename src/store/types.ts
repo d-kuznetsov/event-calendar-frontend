@@ -29,5 +29,5 @@ export interface EntryData extends User {
 export interface IService {
   register(params: any): Promise<EntryData>;
   login(params: any): Promise<EntryData>;
-  fetchUserEvents(token: string | null): Promise<Array<Event>>;
+  fetchUserEvents(): Promise<Array<Event>>;
 }

@@ -1,26 +1,11 @@
-import axios, { AxiosInstance } from "axios";
+import { AxiosInstance } from "axios";
 import { IService, EntryData, Event } from "./types";
 
 export default class Service implements IService {
   httpClient: AxiosInstance;
-  token: string | null;
 
-  constructor() {
-    this.httpClient = axios.create({
-      baseURL: "http://localhost:8080/",
-      timeout: 1000,
-    });
-    this.token = null;
-
-    this.httpClient.interceptors.request.use((config) => {
-      debugger;
-      if (this.token) {
-        config.headers.Authorization = `Bearer ${this.token}`;
-      } else {
-        delete config.headers.Authorization;
-      }
-      return config;
-    });
+  constructor(httpClient: AxiosInstance) {
+    this.httpClient = httpClient;
   }
 
   async register(userData: { name: string; email: string; password: string }) {
@@ -37,8 +22,7 @@ export default class Service implements IService {
     return res.data;
   }
 
-  async fetchUserEvents(token: string) {
-    this.token = token;
+  async fetchUserEvents() {
     const res = await this.httpClient.get<Event[]>("/user-events");
     return res.data;
   }

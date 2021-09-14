@@ -1,6 +1,8 @@
 import { createStore as createVuexStore, useStore as baseUseStore } from "vuex";
 import createPersistedState from "vuex-persistedstate";
 import { InjectionKey, State, IService } from "./types";
+import { AxiosInstance } from "axios";
+import httpClient from "./http-client";
 import Service from "./service";
 
 export const key: InjectionKey = Symbol();
@@ -9,8 +11,8 @@ export function useStore() {
   return baseUseStore(key);
 }
 
-function createStore(service: IService) {
-  return createVuexStore<State>({
+function createStore(service: IService, httpClient: AxiosInstance) {
+  const store = createVuexStore<State>({
     state() {
       return {
         user: null,
@@ -58,16 +60,27 @@ function createStore(service: IService) {
         commit("removeUser");
       },
       fetchEvents({ state, commit }) {
-        return service.fetchUserEvents(state.token).then((events) => {
+        return service.fetchUserEvents().then((events) => {
           commit("setEvents", events);
         });
       },
     },
     plugins: [createPersistedState()],
   });
+
+  httpClient.interceptors.request.use((config) => {
+    if (store.state.token) {
+      config.headers.Authorization = `Bearer ${store.state.token}`;
+    } else {
+      delete config.headers.Authorization;
+    }
+    return config;
+  });
+
+  return store;
 }
 
-export const store = createStore(new Service());
+export const store = createStore(new Service(httpClient), httpClient);
 
 store.subscribe((m, s) => {
   console.log(m);
