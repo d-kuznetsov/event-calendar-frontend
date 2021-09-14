@@ -12,6 +12,15 @@ export function useStore() {
 }
 
 function createStore(service: IService, httpClient: AxiosInstance) {
+  httpClient.interceptors.request.use((config) => {
+    if (store.state.token) {
+      config.headers.Authorization = `Bearer ${store.state.token}`;
+    } else {
+      delete config.headers.Authorization;
+    }
+    return config;
+  });
+
   const store = createVuexStore<State>({
     state() {
       return {
@@ -66,15 +75,6 @@ function createStore(service: IService, httpClient: AxiosInstance) {
       },
     },
     plugins: [createPersistedState()],
-  });
-
-  httpClient.interceptors.request.use((config) => {
-    if (store.state.token) {
-      config.headers.Authorization = `Bearer ${store.state.token}`;
-    } else {
-      delete config.headers.Authorization;
-    }
-    return config;
   });
 
   return store;
