@@ -1,15 +1,23 @@
 <template>
   <div>
-    Week
-    {{ weekEvents }}
+    <WeekDay
+      v-for="[date, events] in weekEvents"
+      :key="date"
+      :events="events"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, PropType } from "vue";
 import { Event } from "../store/types";
+import { Range } from "../lib/date-helper";
+import WeekDay from "./WeekDay.vue";
 
 export default defineComponent({
+  components: {
+    WeekDay,
+  },
   props: {
     events: {
       type: Array as PropType<Event[]>,
@@ -25,11 +33,24 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const weekEvents = computed(() =>
-      props.events.filter((e) => {
-        return e.date >= props.startWeek && e.date <= props.endWeek;
-      })
-    );
+    const weekEvents = computed(() => {
+      const range = new Range(props.startWeek, props.endWeek);
+      const dateMap: { [idx: string]: Event[] } = [...range].reduce(
+        (acc, d) => {
+          return {
+            ...acc,
+            [d as string]: [],
+          };
+        },
+        {}
+      );
+      props.events.forEach((e) => {
+        if (!!dateMap[e.date]) {
+          dateMap[e.date].push(e);
+        }
+      });
+      return Object.entries(dateMap);
+    });
     return {
       weekEvents,
     };
