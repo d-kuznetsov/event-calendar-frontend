@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div class="Week">
     <WeekDay
       v-for="[date, events] in weekEvents"
       :key="date"
       :events="events"
+      class="Week__day"
     />
   </div>
 </template>
@@ -57,3 +58,16 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="postcss">
+.Week {
+  display: flex;
+  justify-content: stretch;
+  height: 100%;
+
+  &__day {
+    flex: 1 0;
+    height: 99%;
+  }
+}
+</style>
