@@ -24,6 +24,6 @@ export default class Service implements IService {
 
   async fetchUserEvents() {
     const res = await this.httpClient.get<Event[]>("/user-events");
-    return res.data;
+    return res.data || [];
   }
 }
