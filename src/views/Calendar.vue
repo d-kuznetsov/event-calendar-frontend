@@ -1,7 +1,11 @@
 <template>
-  <div>
-    Calendar
-    <Week :events="events" :startWeek="period[0]" :endWeek="period[1]" />
+  <div class="Calendar">
+    <Week
+      :events="events"
+      :startWeek="period[0]"
+      :endWeek="period[1]"
+      class="Calendar__week"
+    />
   </div>
 </template>
 
@@ -26,3 +30,13 @@ export default {
   },
 };
 </script>
+
+<style lang="postcss">
+.Calendar {
+  height: 100%;
+
+  &__week {
+    height: 100%;
+  }
+}
+</style>
