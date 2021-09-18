@@ -1,5 +1,8 @@
 <template>
   <div class="Calendar">
+    <div class="Calendar__toolbar">
+      <button @click="create">Create Event</button>
+    </div>
     <Week
       :events="events"
       :startWeek="period[0]"
@@ -50,9 +53,29 @@ export default {
       editableEvent.value = null;
     };
     const update = (e: Event) => {
-      store.dispatch("updateEvent", e).then(() => {
-        store.dispatch("fetchEvents");
-      });
+      if (e.id) {
+        store.dispatch("updateEvent", e).then(() => {
+          store.dispatch("fetchEvents");
+          isEditorOpen.value = false;
+          editableEvent.value = null;
+        });
+      } else {
+        store.dispatch("createEvent", e).then(() => {
+          store.dispatch("fetchEvents");
+          isEditorOpen.value = false;
+          editableEvent.value = null;
+        });
+      }
+    };
+
+    const create = () => {
+      isEditorOpen.value = true;
+      editableEvent.value = {
+        date: "",
+        startTime: "",
+        endTime: "",
+        content: "",
+      } as Event;
     };
 
     return {
@@ -63,6 +86,7 @@ export default {
       handleEventClick,
       handleCloseClick,
       update,
+      create,
     };
   },
 };
@@ -71,9 +95,15 @@ export default {
 <style lang="postcss">
 .Calendar {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &__toolbar {
+    flex: 0 0;
+  }
 
   &__week {
-    height: 100%;
+    flex: 1;
   }
 }
 </style>

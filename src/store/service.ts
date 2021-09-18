@@ -28,7 +28,12 @@ export default class Service implements IService {
   }
 
   async updateEvent(e: Event) {
-    await this.httpClient.post<Event[]>("/update-event", e);
+    await this.httpClient.post("/update-event", e);
     return true;
+  }
+
+  async createEvent(e: Event) {
+    const res = await this.httpClient.post<string>("/create-event", e);
+    return res.data;
   }
 }

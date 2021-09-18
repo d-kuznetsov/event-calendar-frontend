@@ -32,4 +32,5 @@ export interface IService {
   login(params: any): Promise<EntryData>;
   fetchUserEvents(): Promise<Array<Event>>;
   updateEvent(e: Event): Promise<boolean>;
+  createEvent(e: Event): Promise<string>;
 }
