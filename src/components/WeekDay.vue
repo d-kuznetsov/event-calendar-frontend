@@ -52,11 +52,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: {
-    eventClick(eventId: string) {
-      return !!eventId;
-    },
-  },
+  emits: ["eventClick"],
   setup(props, { emit }) {
     const expandedEvents = computed(() => {
       const events = props.events.map((event) => {
@@ -88,7 +84,8 @@ export default defineComponent({
     const handleClick = (e: any) => {
       const eventId = e.target?.dataset?.eventId;
       if (eventId) {
-        emit("eventClick", eventId);
+        const event = props.events.find((e) => e.id === eventId);
+        emit("eventClick", event);
       }
     };
 

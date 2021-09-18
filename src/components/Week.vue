@@ -34,11 +34,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: {
-    eventClick(eventId: string) {
-      return !!eventId;
-    },
-  },
+  emits: ["eventClick"],
   setup(props, { emit }) {
     const weekEvents = computed(() => {
       const range = new Range(props.startWeek, props.endWeek);
