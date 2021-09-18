@@ -5,6 +5,7 @@
       :key="date"
       :events="events"
       class="Week__day"
+      @eventClick="handleEventClick"
     />
   </div>
 </template>
@@ -33,7 +34,12 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  emits: {
+    eventClick(eventId: string) {
+      return !!eventId;
+    },
+  },
+  setup(props, { emit }) {
     const weekEvents = computed(() => {
       const range = new Range(props.startWeek, props.endWeek);
       const dateMap: { [idx: string]: Event[] } = [...range].reduce(
@@ -52,8 +58,14 @@ export default defineComponent({
       });
       return Object.entries(dateMap);
     });
+
+    const handleEventClick = (eventId: string) => {
+      emit("eventClick", eventId);
+    };
+
     return {
       weekEvents,
+      handleEventClick,
     };
   },
 });
