@@ -2,6 +2,7 @@
   <div class="EventEditor">
     <div class="EventEditor__dialog">
       <div class="EventEditor__toolbar">
+        <button @click="handleUpdate">Update</button>
         <button @click="handleClose">Close</button>
       </div>
       <div class="EventEditor__content">
@@ -26,15 +27,20 @@ export default defineComponent({
       type: Object as PropType<Event>,
     },
   },
-  emits: ["close"],
+  emits: ["close", "update"],
   setup(props, { emit }) {
     const editableEvent = reactive({ ...props.event });
     const handleClose = () => {
       emit("close");
     };
+    const handleUpdate = () => {
+      console.log(editableEvent);
+      emit("update", { ...editableEvent });
+    };
     return {
       ...toRefs(editableEvent),
       handleClose,
+      handleUpdate,
     };
   },
 });

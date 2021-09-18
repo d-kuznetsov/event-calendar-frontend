@@ -31,4 +31,5 @@ export interface IService {
   register(params: any): Promise<EntryData>;
   login(params: any): Promise<EntryData>;
   fetchUserEvents(): Promise<Array<Event>>;
+  updateEvent(e: Event): Promise<boolean>;
 }

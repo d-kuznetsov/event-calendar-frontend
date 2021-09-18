@@ -11,6 +11,7 @@
       v-if="isEditorOpen"
       :event="editableEvent"
       @close="handleCloseClick"
+      @update="update"
     />
   </div>
 </template>
@@ -29,7 +30,11 @@ export default {
   },
   setup() {
     const store = useStore();
-    const events = computed(() => store.state.events);
+    const events = computed(() =>
+      store.state.events.sort((a, b) => {
+        return a.startTime > b.startTime ? 1 : -1;
+      })
+    );
     const period = computed(() => store.state.period);
     const isEditorOpen = ref(false);
     const editableEvent = ref<Event | null>(null);
@@ -44,6 +49,11 @@ export default {
       isEditorOpen.value = false;
       editableEvent.value = null;
     };
+    const update = (e: Event) => {
+      store.dispatch("updateEvent", e).then(() => {
+        store.dispatch("fetchEvents");
+      });
+    };
 
     return {
       events,
@@ -52,6 +62,7 @@ export default {
       editableEvent,
       handleEventClick,
       handleCloseClick,
+      update,
     };
   },
 };

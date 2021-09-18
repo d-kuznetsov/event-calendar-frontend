@@ -1,6 +1,6 @@
 import { createStore as createVuexStore, useStore as baseUseStore } from "vuex";
 import createPersistedState from "vuex-persistedstate";
-import { InjectionKey, State, IService } from "./types";
+import { InjectionKey, State, IService, Event } from "./types";
 import { AxiosInstance } from "axios";
 import httpClient from "./http-client";
 import Service from "./service";
@@ -70,10 +70,13 @@ function createStore(service: IService, httpClient: AxiosInstance) {
         commit("removeToken");
         commit("removeUser");
       },
-      fetchEvents({ state, commit }) {
+      fetchEvents({ commit }) {
         return service.fetchUserEvents().then((events) => {
           commit("setEvents", events);
         });
+      },
+      updateEvent(_, e: Event) {
+        return service.updateEvent(e);
       },
     },
     plugins: [createPersistedState()],

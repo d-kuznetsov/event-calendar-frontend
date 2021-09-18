@@ -26,4 +26,9 @@ export default class Service implements IService {
     const res = await this.httpClient.get<Event[]>("/user-events");
     return res.data || [];
   }
+
+  async updateEvent(e: Event) {
+    await this.httpClient.post<Event[]>("/update-event", e);
+    return true;
+  }
 }
