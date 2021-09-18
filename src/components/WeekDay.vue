@@ -3,13 +3,13 @@
     <div class="WeekDay__grid">
       <div v-for="h in 24" :key="h" class="WeekDay__gridItem" />
     </div>
-    <div class="WeekDay__events">
+    <div class="WeekDay__events" @click="handleClick">
       <div
         v-for="{ event, intersec, leftOffset } in expandedEvents"
         :key="event.id"
         class="WeekDay__eventWrap"
         :style="{
-          width: `calc(${100 / (intersec + 1)}% - 1px)`,
+          width: `${100 / (intersec + 1)}%`,
           height: `${getPctOfDur('00:00', event.endTime)}%`,
           left: `${(100 / (intersec + 1)) * leftOffset}%`,
         }"
@@ -23,6 +23,7 @@
               event.endTime
             )}% - 1px)`,
           }"
+          :data-event-id="event.id"
         ></div>
       </div>
     </div>
@@ -51,7 +52,12 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  emits: {
+    eventClick(eventId: string) {
+      return !!eventId;
+    },
+  },
+  setup(props, { emit }) {
     const expandedEvents = computed(() => {
       const events = props.events.map((event) => {
         return {
@@ -75,10 +81,18 @@ export default defineComponent({
         }
       }
 
-      return events;
+      return events.reverse();
     });
 
-    return { expandedEvents, getPctOfDur };
+    // TODO: Fix event type
+    const handleClick = (e: any) => {
+      const eventId = e.target?.dataset?.eventId;
+      if (eventId) {
+        emit("eventClick", eventId);
+      }
+    };
+
+    return { expandedEvents, getPctOfDur, handleClick };
   },
 });
 </script>
@@ -117,6 +131,7 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    padding: 0px 1px 1px 1px;
   }
 
   &__event {
@@ -130,6 +145,7 @@ export default defineComponent({
       #3b82f6 5%,
       #3b82f6 10%
     );
+    cursor: pointer;
   }
 }
 </style>
