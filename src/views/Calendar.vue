@@ -7,13 +7,18 @@
       class="Calendar__week"
       @eventClick="handleEventClick"
     />
-    <EventEditor v-if="isEditorOpen" @click="handleCloseClick" />
+    <EventEditor
+      v-if="isEditorOpen"
+      :event="editableEvent"
+      @close="handleCloseClick"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { computed, ref } from "vue";
 import { useStore } from "../store";
+import { Event } from "../store/types";
 import Week from "../components/Week.vue";
 import EventEditor from "../components/EventEditor.vue";
 
@@ -27,19 +32,24 @@ export default {
     const events = computed(() => store.state.events);
     const period = computed(() => store.state.period);
     const isEditorOpen = ref(false);
+    const editableEvent = ref<Event | null>(null);
+
     store.dispatch("fetchEvents");
 
-    const handleEventClick = (eventId: string) => {
+    const handleEventClick = (e: Event) => {
       isEditorOpen.value = true;
+      editableEvent.value = { ...e };
     };
     const handleCloseClick = () => {
       isEditorOpen.value = false;
+      editableEvent.value = null;
     };
 
     return {
       events,
       period,
       isEditorOpen,
+      editableEvent,
       handleEventClick,
       handleCloseClick,
     };

@@ -4,21 +4,36 @@
       <div class="EventEditor__toolbar">
         <button @click="handleClose">Close</button>
       </div>
-      <div class="EventEditor__content">Content</div>
+      <div class="EventEditor__content">
+        <div class="flex mb-md">
+          <input type="date" v-model="date" class="flex-1" />
+          <input type="time" v-model="startTime" class="flex-1 mx-sm" />
+          <input type="time" v-model="endTime" class="flex-1" />
+        </div>
+        <textarea v-model="content" />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType, reactive, toRefs } from "vue";
+import { Event } from "../store/types";
 
 export default defineComponent({
+  props: {
+    event: {
+      type: Object as PropType<Event>,
+    },
+  },
   emits: ["close"],
-  setup(_, { emit }) {
+  setup(props, { emit }) {
+    const editableEvent = reactive({ ...props.event });
     const handleClose = () => {
       emit("close");
     };
     return {
+      ...toRefs(editableEvent),
       handleClose,
     };
   },
@@ -49,6 +64,8 @@ export default defineComponent({
     padding: 8px;
   }
   &__content {
+    display: flex;
+    flex-direction: column;
     padding: 8px;
   }
 }
