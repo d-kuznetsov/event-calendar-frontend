@@ -22,8 +22,13 @@ export default class Service implements IService {
     return res.data;
   }
 
-  async fetchUserEvents() {
-    const res = await this.httpClient.get<Event[]>("/user-events");
+  async fetchUserEvents(periodStart: string, periodEnd: string) {
+    const res = await this.httpClient.get<Event[]>("/user-events", {
+      params: {
+        periodStart,
+        periodEnd,
+      },
+    });
     return res.data || [];
   }
 

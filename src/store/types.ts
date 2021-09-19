@@ -30,7 +30,10 @@ export interface EntryData extends User {
 export interface IService {
   register(params: any): Promise<EntryData>;
   login(params: any): Promise<EntryData>;
-  fetchUserEvents(): Promise<Array<Event>>;
+  fetchUserEvents(
+    periodStart: string,
+    periodEnd: string
+  ): Promise<Array<Event>>;
   updateEvent(e: Event): Promise<boolean>;
   createEvent(e: Event): Promise<string>;
   deleteEvent(id: string): Promise<boolean>;

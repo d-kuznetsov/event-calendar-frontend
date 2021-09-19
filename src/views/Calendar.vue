@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useStore } from "../store";
 import { Event } from "../store/types";
 import Week from "../components/Week.vue";
@@ -45,7 +45,7 @@ export default {
     const isEditorOpen = ref(false);
     const editableEvent = ref<Event | null>(null);
 
-    store.dispatch("fetchEvents");
+    watch(period, () => store.dispatch("fetchEvents"), { immediate: true });
 
     const handleEventClick = (e: Event) => {
       isEditorOpen.value = true;

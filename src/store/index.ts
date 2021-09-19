@@ -78,8 +78,9 @@ function createStore(service: IService, httpClient: AxiosInstance) {
         commit("removeToken");
         commit("removeUser");
       },
-      fetchEvents({ commit }) {
-        return service.fetchUserEvents().then((events) => {
+      fetchEvents({ state, commit }) {
+        const [start, end] = state.period;
+        return service.fetchUserEvents(start, end).then((events) => {
           commit("setEvents", events);
         });
       },
