@@ -14,6 +14,20 @@ export function getWeekPeriod(date: Date | string): [string, string] {
   return [getDateAsStr(startWeek), getDateAsStr(endWeek)];
 }
 
+export function getNextDate(dateStr: string) {
+  const date = new Date(dateStr);
+  let monthDay = date.getDate();
+  date.setDate(++monthDay);
+  return getDateAsStr(date);
+}
+
+export function getPrevDate(dateStr: string) {
+  const date = new Date(dateStr);
+  let monthDay = date.getDate();
+  date.setDate(--monthDay);
+  return getDateAsStr(date);
+}
+
 export class Range {
   readonly from: string;
   readonly to: string;

@@ -4,7 +4,7 @@ import { InjectionKey, State, IService, Event } from "./types";
 import { AxiosInstance } from "axios";
 import httpClient from "./http-client";
 import Service from "./service";
-import { getWeekPeriod } from "../lib/date-helper";
+import { getWeekPeriod, getNextDate, getPrevDate } from "../lib/date-helper";
 
 export const key: InjectionKey = Symbol();
 
@@ -51,6 +51,14 @@ function createStore(service: IService, httpClient: AxiosInstance) {
       },
       setEvents(state, events) {
         state.events = events;
+      },
+      incrementWeek(state) {
+        const monday = getNextDate(state.period[1]);
+        state.period = getWeekPeriod(monday);
+      },
+      decrementWeek(state) {
+        const sunday = getPrevDate(state.period[0]);
+        state.period = getWeekPeriod(sunday);
       },
     },
     actions: {

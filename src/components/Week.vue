@@ -1,12 +1,18 @@
 <template>
   <div class="Week">
-    <WeekDay
-      v-for="[date, events] in weekEvents"
-      :key="date"
-      :events="events"
-      class="Week__day"
-      @eventClick="handleEventClick"
-    />
+    <div class="Week__toolbar">
+      <button @click="onPrevClick">Prev</button>
+      <button @click="onNextClick">Next</button>
+    </div>
+    <div class="Week__days">
+      <WeekDay
+        v-for="[date, events] in weekEvents"
+        :key="date"
+        :events="events"
+        class="Week__day"
+        @eventClick="handleEventClick"
+      />
+    </div>
   </div>
 </template>
 
@@ -34,7 +40,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["eventClick"],
+  emits: ["eventClick", "prev", "next"],
   setup(props, { emit }) {
     const weekEvents = computed(() => {
       const range = new Range(props.startWeek, props.endWeek);
@@ -59,9 +65,18 @@ export default defineComponent({
       emit("eventClick", eventId);
     };
 
+    const onPrevClick = () => {
+      emit("prev");
+    };
+    const onNextClick = () => {
+      emit("next");
+    };
+
     return {
       weekEvents,
       handleEventClick,
+      onPrevClick,
+      onNextClick,
     };
   },
 });
@@ -70,8 +85,18 @@ export default defineComponent({
 <style lang="postcss">
 .Week {
   display: flex;
-  justify-content: stretch;
+  flex-direction: column;
   height: 100%;
+
+  &__toolbar {
+    flex: 0 0;
+  }
+
+  &__days {
+    flex: 1;
+    display: flex;
+    justify-content: stretch;
+  }
 
   &__day {
     flex: 1 0;

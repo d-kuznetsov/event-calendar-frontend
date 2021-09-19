@@ -9,6 +9,8 @@
       :endWeek="period[1]"
       class="Calendar__week"
       @eventClick="handleEventClick"
+      @prev="onPrev"
+      @next="onNext"
     />
     <EventEditor
       v-if="isEditorOpen"
@@ -87,6 +89,13 @@ export default {
       });
     };
 
+    const onNext = () => {
+      store.commit("incrementWeek");
+    };
+    const onPrev = () => {
+      store.commit("decrementWeek");
+    };
+
     return {
       events,
       period,
@@ -97,6 +106,8 @@ export default {
       update,
       create,
       handleDelete,
+      onNext,
+      onPrev,
     };
   },
 };
