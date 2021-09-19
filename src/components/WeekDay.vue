@@ -5,24 +5,24 @@
     </div>
     <div class="WeekDay__events" @click="handleClick">
       <div
-        v-for="{ event, intersec, leftOffset } in expandedEvents"
+        v-for="{
+          event,
+          width,
+          offsetLeft,
+          eventWrapHeight,
+          eventHeight,
+        } in enrichedEvents"
         :key="event.id"
         class="WeekDay__eventWrap"
         :style="{
-          width: `${100 / (intersec + 1)}%`,
-          height: `${getPctOfDur('00:00', event.endTime)}%`,
-          left: `${(100 / (intersec + 1)) * leftOffset}%`,
+          width: `${width}%`,
+          height: `${eventWrapHeight}%`,
+          left: `${offsetLeft}%`,
         }"
       >
         <div
           class="WeekDay__event"
-          :style="{
-            height: `calc(${getPctOfDur(
-              event.startTime,
-              event.endTime,
-              event.endTime
-            )}% - 1px)`,
-          }"
+          :style="{ height: `calc(${eventHeight}% - 1px)` }"
           :data-event-id="event.id"
         ></div>
       </div>
@@ -45,6 +45,38 @@ function getPctOfDur(start: string, end: string, dur: string = "24:00") {
   return Math.round((eventDur / wholeDur) * 10000) / 100;
 }
 
+class AreaManager {
+  readonly height: number;
+  readonly width: number;
+  readonly coordList: Array<{
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+  }>;
+
+  constructor(h: number = 100, w: number = 100) {
+    this.height = h;
+    this.width = w;
+    this.coordList = [];
+  }
+
+  add(x1: number, y1: number, x2: number, y2: number) {
+    this.coordList.push({
+      x1,
+      y1,
+      x2,
+      y2,
+    });
+  }
+
+  check(candX1: number, candY1: number, candX2: number, candY2: number) {
+    return this.coordList.every(({ x1, x2, y1, y2 }) => {
+      return candY2 <= y1 || candY1 >= y2 || candX1 >= x2 || candX2 <= x1;
+    });
+  }
+}
+
 export default defineComponent({
   props: {
     events: {
@@ -53,31 +85,49 @@ export default defineComponent({
     },
   },
   emits: ["eventClick"],
-  setup(props, { emit }) {
-    const expandedEvents = computed(() => {
-      const events = props.events.map((event) => {
-        return {
-          event,
-          intersec: 0,
-          leftOffset: 0,
-        };
-      });
 
-      for (let i = 0; i < events.length; i++) {
-        for (let j = 0; j < events.length; j++) {
+  setup(props, { emit }) {
+    const enrichedEvents = computed(() => {
+      const intersecs = props.events.map((_, i, arr) => {
+        let intersec = 0;
+        for (let j = 0; j < arr.length; j++) {
           if (
             i == j ||
-            events[j].event.endTime <= events[i].event.startTime ||
-            events[j].event.startTime >= events[i].event.endTime
+            arr[j].endTime <= arr[i].startTime ||
+            arr[j].startTime >= arr[i].endTime
           ) {
             continue;
           }
-          events[i].intersec++;
-          j < i && events[i].leftOffset++;
+          intersec++;
         }
-      }
+        return intersec;
+      });
 
-      return events.reverse();
+      const areaMgr = new AreaManager();
+
+      return props.events
+        .map((e, idx) => {
+          const width = Math.floor(100 / (intersecs[idx] + 1));
+          const y1 = getPctOfDur("00:00", e.startTime);
+          const y2 = getPctOfDur("00:00", e.endTime);
+          let x1 = 0;
+          let x2 = width;
+
+          while (!areaMgr.check(x1, y1, x2, y2)) {
+            x1 += width;
+            x2 += width;
+          }
+          areaMgr.add(x1, y1, x2, y2);
+
+          return {
+            event: e,
+            width: width,
+            offsetLeft: x1,
+            eventWrapHeight: y2,
+            eventHeight: getPctOfDur(e.startTime, e.endTime, e.endTime),
+          };
+        })
+        .reverse();
     });
 
     // TODO: Fix event type
@@ -89,7 +139,7 @@ export default defineComponent({
       }
     };
 
-    return { expandedEvents, getPctOfDur, handleClick };
+    return { enrichedEvents, handleClick };
   },
 });
 </script>
