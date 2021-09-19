@@ -33,4 +33,5 @@ export interface IService {
   fetchUserEvents(): Promise<Array<Event>>;
   updateEvent(e: Event): Promise<boolean>;
   createEvent(e: Event): Promise<string>;
+  deleteEvent(id: string): Promise<boolean>;
 }

@@ -36,4 +36,11 @@ export default class Service implements IService {
     const res = await this.httpClient.post<string>("/create-event", e);
     return res.data;
   }
+
+  async deleteEvent(id: string) {
+    const res = await this.httpClient.post<boolean>("/delete-event", {
+      id,
+    });
+    return res.data;
+  }
 }

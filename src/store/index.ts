@@ -81,6 +81,9 @@ function createStore(service: IService, httpClient: AxiosInstance) {
       createEvent(_, e: Event) {
         return service.createEvent(e);
       },
+      deleteEvent(_, id: string) {
+        return service.deleteEvent(id);
+      },
     },
     plugins: [createPersistedState()],
   });

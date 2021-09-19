@@ -15,6 +15,7 @@
       :event="editableEvent"
       @close="handleCloseClick"
       @update="update"
+      @delete="handleDelete"
     />
   </div>
 </template>
@@ -78,6 +79,14 @@ export default {
       } as Event;
     };
 
+    const handleDelete = (id: string) => {
+      store.dispatch("deleteEvent", id).then(() => {
+        store.dispatch("fetchEvents");
+        isEditorOpen.value = false;
+        editableEvent.value = null;
+      });
+    };
+
     return {
       events,
       period,
@@ -87,6 +96,7 @@ export default {
       handleCloseClick,
       update,
       create,
+      handleDelete,
     };
   },
 };
