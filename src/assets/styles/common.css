@@ -17,3 +17,7 @@
 .flex-1 {
   flex: 1 1 0%;
 }
+
+.color-main {
+  color: #1e42ab;
+}

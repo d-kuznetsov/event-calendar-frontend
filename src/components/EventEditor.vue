@@ -2,9 +2,30 @@
   <div class="EventEditor">
     <div class="EventEditor__dialog">
       <div class="EventEditor__toolbar">
-        <button @click="handleDelete">Delete</button>
-        <button @click="handleUpdate">Update</button>
-        <button @click="handleClose">Close</button>
+        <div class="EventEditor__iconWrap">
+          <Delete
+            @click="handleDelete"
+            class="color-main"
+            :width="iconSize"
+            :height="iconSize"
+          />
+        </div>
+        <div class="EventEditor__iconWrap">
+          <Done
+            @click="handleUpdate"
+            class="color-main"
+            :width="iconSize"
+            :height="iconSize"
+          />
+        </div>
+        <div class="EventEditor__iconWrap">
+          <Close
+            @click="handleClose"
+            class="color-main"
+            :width="iconSize"
+            :height="iconSize"
+          />
+        </div>
       </div>
       <div class="EventEditor__content">
         <div class="flex mb-md">
@@ -20,9 +41,17 @@
 
 <script lang="ts">
 import { defineComponent, PropType, reactive, toRefs } from "vue";
+import Close from "../components/icon-buttons/Close.vue";
+import Delete from "../components/icon-buttons/Delete.vue";
+import Done from "../components/icon-buttons/Done.vue";
 import { Event } from "../store/types";
 
 export default defineComponent({
+  components: {
+    Close,
+    Done,
+    Delete,
+  },
   props: {
     event: {
       type: Object as PropType<Event>,
@@ -31,6 +60,8 @@ export default defineComponent({
   emits: ["close", "update", "delete"],
   setup(props, { emit }) {
     const editableEvent = reactive({ ...props.event });
+    const iconSize = "24px";
+
     const handleClose = () => {
       emit("close");
     };
@@ -42,6 +73,7 @@ export default defineComponent({
     };
     return {
       ...toRefs(editableEvent),
+      iconSize,
       handleClose,
       handleUpdate,
       handleDelete,
@@ -65,18 +97,35 @@ export default defineComponent({
 
   &__dialog {
     width: 640px;
+    padding: 8px;
     background-color: #fffbeb;
     border-radius: 8px;
     overflow: hidden;
   }
+
   &__toolbar {
-    background-color: #10b981;
-    padding: 8px;
+    display: flex;
+    justify-content: flex-end;
+    border-bottom: 2px solid #ccc;
+    padding: 8px 0px;
   }
+
+  &__iconWrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #bfdbfe;
+    border-radius: 50%;
+    height: 36px;
+    width: 36px;
+    margin-left: 4px;
+    cursor: pointer;
+  }
+
   &__content {
     display: flex;
     flex-direction: column;
-    padding: 8px;
+    padding: 8px 0px;
   }
 }
 </style>
