@@ -3,6 +3,17 @@
     <div class="Week__toolbar">
       <button @click="onPrevClick">Prev</button>
       <button @click="onNextClick">Next</button>
+      <div>
+        <div class="Week__dayNames flex">
+          <div
+            class="flex-1 Week__dayName"
+            v-for="[date] in weekEvents"
+            :key="date"
+          >
+            {{ getDayName(date) }}
+          </div>
+        </div>
+      </div>
     </div>
     <div class="Week__days">
       <div class="Week__times">
@@ -24,7 +35,7 @@
 <script lang="ts">
 import { defineComponent, computed, PropType } from "vue";
 import { Event } from "../store/types";
-import { Range, getTimeStrByHour } from "../lib/date-helper";
+import { Range, getTimeStrByHour, getDayName } from "../lib/date-helper";
 import WeekDay from "./WeekDay.vue";
 
 export default defineComponent({
@@ -83,6 +94,7 @@ export default defineComponent({
       onPrevClick,
       onNextClick,
       getTimeStrByHour,
+      getDayName,
     };
   },
 });
@@ -96,6 +108,16 @@ export default defineComponent({
 
   &__toolbar {
     flex: 0 0;
+  }
+
+  &__dayNames {
+    padding-left: 40px;
+    border-bottom: 2px solid green;
+  }
+
+  &__dayName {
+    display: flex;
+    justify-content: center;
   }
 
   &__days {
@@ -114,13 +136,14 @@ export default defineComponent({
     &Item {
       flex: 1;
       display: flex;
+      justify-content: center;
       align-items: center;
       border-bottom: 1px solid #ddd;
       font-size: 12px;
-      padding: 0 4px;
       border-right: 1px solid #bbb;
       font-weight: 500;
-      color: #999;
+      color: #777;
+      width: 40px;
     }
   }
 

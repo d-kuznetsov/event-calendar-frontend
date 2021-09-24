@@ -32,6 +32,16 @@ export function getTimeStrByHour(h: number) {
   return `0${h}:00`.slice(-5);
 }
 
+const formatter = new Intl.DateTimeFormat("en", {
+  weekday: "short",
+  day: "numeric",
+  month: "short",
+});
+
+export function getDayName(dateStr: string) {
+  return formatter.format(new Date(dateStr));
+}
+
 export class Range {
   readonly from: string;
   readonly to: string;
