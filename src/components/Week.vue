@@ -5,6 +5,11 @@
       <button @click="onNextClick">Next</button>
     </div>
     <div class="Week__days">
+      <div class="Week__times">
+        <div v-for="h in 24" :key="h" class="Week__timesItem">
+          {{ getTimeStrByHour(h - 1) }}
+        </div>
+      </div>
       <WeekDay
         v-for="[date, events] in weekEvents"
         :key="date"
@@ -19,7 +24,7 @@
 <script lang="ts">
 import { defineComponent, computed, PropType } from "vue";
 import { Event } from "../store/types";
-import { Range } from "../lib/date-helper";
+import { Range, getTimeStrByHour } from "../lib/date-helper";
 import WeekDay from "./WeekDay.vue";
 
 export default defineComponent({
@@ -77,6 +82,7 @@ export default defineComponent({
       handleEventClick,
       onPrevClick,
       onNextClick,
+      getTimeStrByHour,
     };
   },
 });
@@ -96,6 +102,26 @@ export default defineComponent({
     flex: 1;
     display: flex;
     justify-content: stretch;
+  }
+
+  &__times {
+    flex: 0 0;
+    height: 99%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &Item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      font-size: 12px;
+      padding: 0 4px;
+      border-right: 1px solid #bbb;
+      font-weight: 500;
+      color: #999;
+    }
   }
 
   &__day {

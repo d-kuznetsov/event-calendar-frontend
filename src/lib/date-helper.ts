@@ -28,6 +28,10 @@ export function getPrevDate(dateStr: string) {
   return getDateAsStr(date);
 }
 
+export function getTimeStrByHour(h: number) {
+  return `0${h}:00`.slice(-5);
+}
+
 export class Range {
   readonly from: string;
   readonly to: string;
