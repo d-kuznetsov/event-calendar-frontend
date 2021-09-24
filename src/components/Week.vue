@@ -1,8 +1,8 @@
 <template>
   <div class="Week">
     <div class="Week__toolbar">
-      <button @click="onPrevClick">Prev</button>
-      <button @click="onNextClick">Next</button>
+      <button class="Week__prev" @click="onPrevClick">Prev</button>
+      <button class="Week__next" @click="onNextClick">Next</button>
       <div>
         <div class="Week__dayNames flex">
           <div
@@ -108,11 +108,23 @@ export default defineComponent({
 
   &__toolbar {
     flex: 0 0;
+    position: relative;
+  }
+
+  &__prev {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
+  &__next {
+    position: absolute;
+    top: 0px;
+    right: 0px;
   }
 
   &__dayNames {
-    padding-left: 40px;
     border-bottom: 2px solid green;
+    padding: 4px 0px 4px 40px;
   }
 
   &__dayName {
@@ -128,7 +140,7 @@ export default defineComponent({
 
   &__times {
     flex: 0 0;
-    height: 99%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -149,7 +161,7 @@ export default defineComponent({
 
   &__day {
     flex: 1 0;
-    height: 99%;
+    height: 100%;
   }
 }
 </style>
