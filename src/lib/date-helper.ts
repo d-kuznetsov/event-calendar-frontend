@@ -1,5 +1,11 @@
+const dateFormatter = new Intl.DateTimeFormat("sv-SE", {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+
 export function getDateAsStr(date: Date) {
-  return date.toISOString().substr(0, 10);
+  return dateFormatter.format(date);
 }
 
 export function getWeekPeriod(date: Date | string): [string, string] {
