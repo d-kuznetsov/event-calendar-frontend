@@ -1,7 +1,17 @@
 <template>
   <div class="Calendar">
     <div class="Calendar__toolbar">
-      <button @click="create">Create Event</button>
+      <button class="Calendar__createEvent btn-round" @click="create">
+        <Add />
+      </button>
+      <div class="flex">
+        <button class="btn-round" @click="onPrev">
+          <Back />
+        </button>
+        <button class="btn-round ml-sm" @click="onNext">
+          <Forward />
+        </button>
+      </div>
     </div>
     <Week
       :events="events"
@@ -28,11 +38,17 @@ import { useStore } from "../store";
 import { Event } from "../store/types";
 import Week from "../components/Week.vue";
 import EventEditor from "../components/EventEditor.vue";
+import Add from "../components/icon-buttons/Add.vue";
+import Back from "../components/icon-buttons/Back.vue";
+import Forward from "../components/icon-buttons/Forward.vue";
 
 export default {
   components: {
     Week,
     EventEditor,
+    Add,
+    Back,
+    Forward,
   },
   setup() {
     const store = useStore();
@@ -121,6 +137,10 @@ export default {
 
   &__toolbar {
     flex: 0 0;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 8px;
   }
 
   &__week {

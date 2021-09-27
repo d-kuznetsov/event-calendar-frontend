@@ -1,17 +1,13 @@
 <template>
   <div class="Week">
     <div class="Week__toolbar">
-      <button class="Week__prev" @click="onPrevClick">Prev</button>
-      <button class="Week__next" @click="onNextClick">Next</button>
-      <div>
-        <div class="Week__dayNames flex">
-          <div
-            class="flex-1 Week__dayName"
-            v-for="[date] in weekEvents"
-            :key="date"
-          >
-            {{ getDayName(date) }}
-          </div>
+      <div class="Week__dayNames flex">
+        <div
+          class="flex-1 Week__dayName"
+          v-for="[date] in weekEvents"
+          :key="date"
+        >
+          {{ getDayName(date) }}
         </div>
       </div>
     </div>
@@ -56,7 +52,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["eventClick", "prev", "next"],
+  emits: ["eventClick"],
   setup(props, { emit }) {
     const weekEvents = computed(() => {
       const range = new Range(props.startWeek, props.endWeek);
@@ -81,18 +77,9 @@ export default defineComponent({
       emit("eventClick", eventId);
     };
 
-    const onPrevClick = () => {
-      emit("prev");
-    };
-    const onNextClick = () => {
-      emit("next");
-    };
-
     return {
       weekEvents,
       handleEventClick,
-      onPrevClick,
-      onNextClick,
       getTimeStrByHour,
       getDayName,
     };
@@ -109,22 +96,16 @@ export default defineComponent({
   &__toolbar {
     flex: 0 0;
     position: relative;
-  }
-
-  &__prev {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-  }
-  &__next {
-    position: absolute;
-    top: 0px;
-    right: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
   }
 
   &__dayNames {
-    border-bottom: 2px solid green;
+    border-bottom: 1px solid #ccc;
     padding: 4px 0px 4px 40px;
+    font-size: 12px;
+    font-weight: 500;
   }
 
   &__dayName {
