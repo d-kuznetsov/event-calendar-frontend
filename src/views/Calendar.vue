@@ -1,14 +1,14 @@
 <template>
   <div class="Calendar">
     <div class="Calendar__toolbar">
-      <button class="Calendar__createEvent btn-round" @click="create">
+      <button class="btn-round" @click="addNewEvent">
         <Add />
       </button>
-      <div class="flex">
-        <button class="btn-round" @click="onPrev">
+      <div>
+        <button class="btn-round" @click="decrementWeek">
           <Back />
         </button>
-        <button class="btn-round ml-sm" @click="onNext">
+        <button class="btn-round ml-sm" @click="incrementWeek">
           <Forward />
         </button>
       </div>
@@ -18,16 +18,14 @@
       :weekStart="period[0]"
       :weekEnd="period[1]"
       class="Calendar__week"
-      @eventClick="handleEventClick"
-      @prev="onPrev"
-      @next="onNext"
+      @eventClick="editEvent"
     />
     <EventEditor
       v-if="isEditorOpen"
       :event="editableEvent"
-      @close="handleCloseClick"
-      @update="update"
-      @delete="handleDelete"
+      @close="closeEditor"
+      @update="onEventUpdate"
+      @delete="onEventDelete"
     />
   </div>
 </template>
@@ -52,26 +50,32 @@ export default {
   },
   setup() {
     const store = useStore();
-    const events = computed(() =>
-      store.state.events.sort((a, b) => {
-        return a.startTime > b.startTime ? 1 : -1;
-      })
-    );
+    const events = computed(() => store.state.events);
     const period = computed(() => store.state.period);
     const isEditorOpen = ref(false);
     const editableEvent = ref<Event | null>(null);
 
     watch(period, () => store.dispatch("fetchEvents"), { immediate: true });
 
-    const handleEventClick = (e: Event) => {
+    const editEvent = (e: Event) => {
       isEditorOpen.value = true;
       editableEvent.value = { ...e };
     };
-    const handleCloseClick = () => {
+    const addNewEvent = () => {
+      isEditorOpen.value = true;
+      editableEvent.value = {
+        date: "",
+        startTime: "",
+        endTime: "",
+        content: "",
+      } as Event;
+    };
+    const closeEditor = () => {
       isEditorOpen.value = false;
       editableEvent.value = null;
     };
-    const update = (e: Event) => {
+
+    const onEventUpdate = (e: Event) => {
       if (e.id) {
         store.dispatch("updateEvent", e).then(() => {
           store.dispatch("fetchEvents");
@@ -86,18 +90,7 @@ export default {
         });
       }
     };
-
-    const create = () => {
-      isEditorOpen.value = true;
-      editableEvent.value = {
-        date: "",
-        startTime: "",
-        endTime: "",
-        content: "",
-      } as Event;
-    };
-
-    const handleDelete = (id: string) => {
+    const onEventDelete = (id: string) => {
       store.dispatch("deleteEvent", id).then(() => {
         store.dispatch("fetchEvents");
         isEditorOpen.value = false;
@@ -105,10 +98,10 @@ export default {
       });
     };
 
-    const onNext = () => {
+    const incrementWeek = () => {
       store.commit("incrementWeek");
     };
-    const onPrev = () => {
+    const decrementWeek = () => {
       store.commit("decrementWeek");
     };
 
@@ -117,13 +110,13 @@ export default {
       period,
       isEditorOpen,
       editableEvent,
-      handleEventClick,
-      handleCloseClick,
-      update,
-      create,
-      handleDelete,
-      onNext,
-      onPrev,
+      editEvent,
+      closeEditor,
+      addNewEvent,
+      onEventUpdate,
+      onEventDelete,
+      incrementWeek,
+      decrementWeek,
     };
   },
 };
@@ -137,7 +130,6 @@ export default {
 
   &__toolbar {
     flex: 0 0;
-    position: relative;
     display: flex;
     justify-content: space-between;
     padding: 4px 8px;

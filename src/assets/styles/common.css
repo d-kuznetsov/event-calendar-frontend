@@ -13,6 +13,10 @@
   margin-left: 4px;
 }
 
+.ml-md {
+  margin-left: 8px;
+}
+
 .flex {
   display: flex;
 }
