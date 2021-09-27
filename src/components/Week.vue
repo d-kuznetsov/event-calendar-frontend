@@ -1,20 +1,14 @@
 <template>
   <div class="Week">
-    <div class="Week__toolbar">
-      <div class="Week__dayNames flex">
-        <div
-          class="flex-1 Week__dayName"
-          v-for="[date] in weekEvents"
-          :key="date"
-        >
-          {{ getDayName(date) }}
-        </div>
+    <div class="Week__dayNames">
+      <div class="Week__dayName" v-for="[date] in weekEvents" :key="date">
+        {{ getDayName(date) }}
       </div>
     </div>
     <div class="Week__days">
       <div class="Week__times">
-        <div v-for="h in 24" :key="h" class="Week__timesItem">
-          {{ getTimeStrByHour(h - 1) }}
+        <div v-for="hour in 24" :key="hour" class="Week__time">
+          {{ getTimeStrByHour(hour - 1) }}
         </div>
       </div>
       <WeekDay
@@ -22,7 +16,7 @@
         :key="date"
         :events="events"
         class="Week__day"
-        @eventClick="handleEventClick"
+        @eventClick="onEventClick"
       />
     </div>
   </div>
@@ -34,6 +28,10 @@ import { Event } from "../store/types";
 import { Range, getTimeStrByHour, getDayName } from "../lib/date-helper";
 import WeekDay from "./WeekDay";
 
+interface DateMap {
+  [date: string]: Event[];
+}
+
 export default defineComponent({
   components: {
     WeekDay,
@@ -43,43 +41,41 @@ export default defineComponent({
       type: Array as PropType<Event[]>,
       required: true,
     },
-    startWeek: {
+    weekStart: {
       type: String,
       required: true,
     },
-    endWeek: {
+    weekEnd: {
       type: String,
       required: true,
     },
   },
   emits: ["eventClick"],
+
   setup(props, { emit }) {
     const weekEvents = computed(() => {
-      const range = new Range(props.startWeek, props.endWeek);
-      const dateMap: { [idx: string]: Event[] } = [...range].reduce(
-        (acc, d) => {
-          return {
-            ...acc,
-            [d as string]: [],
-          };
-        },
-        {}
-      );
-      props.events.forEach((e) => {
-        if (!!dateMap[e.date]) {
-          dateMap[e.date].push(e);
+      const weekRange = new Range(props.weekStart, props.weekEnd);
+      const dateMap: DateMap = [...weekRange].reduce((acc, date) => {
+        return {
+          ...acc,
+          [date as string]: [],
+        };
+      }, {});
+      props.events.forEach((event) => {
+        if (!!dateMap[event.date]) {
+          dateMap[event.date].push(event);
         }
       });
       return Object.entries(dateMap);
     });
 
-    const handleEventClick = (eventId: string) => {
+    const onEventClick = (eventId: string) => {
       emit("eventClick", eventId);
     };
 
     return {
       weekEvents,
-      handleEventClick,
+      onEventClick,
       getTimeStrByHour,
       getDayName,
     };
@@ -88,29 +84,27 @@ export default defineComponent({
 </script>
 
 <style lang="postcss">
+$time-block-width: 45px;
+
 .Week {
   display: flex;
   flex-direction: column;
   height: 100%;
 
-  &__toolbar {
-    flex: 0 0;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
-
   &__dayNames {
-    border-bottom: 1px solid #ccc;
-    padding: 4px 0px 4px 40px;
+    flex: 0;
+    display: flex;
+    justify-content: flex-end;
+    padding: 4px 0px 4px $time-block-width;
+    border-bottom: 1px solid $clr-gray-200;
     font-size: 12px;
     font-weight: 500;
   }
 
   &__dayName {
-    display: flex;
-    justify-content: center;
+    flex: 1;
+    text-align: center;
+    color: $clr-gray-900;
   }
 
   &__days {
@@ -124,20 +118,20 @@ export default defineComponent({
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: stretch;
+  }
 
-    &Item {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-bottom: 1px solid #ddd;
-      font-size: 12px;
-      border-right: 1px solid #bbb;
-      font-weight: 500;
-      color: #777;
-      width: 40px;
-    }
+  &__time {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: $time-block-width;
+    border-bottom: 1px solid $clr-gray-200;
+    border-right: 1px solid $clr-gray-300;
+    color: $clr-gray-500;
+    font-size: 11px;
+    font-weight: 500;
   }
 
   &__day {

@@ -12,12 +12,12 @@ export function getWeekPeriod(date: Date | string): [string, string] {
   if (typeof date === "string") {
     date = new Date(date);
   }
-  const startWeek = new Date(date);
-  const endWeek = new Date(date);
+  const weekStart = new Date(date);
+  const weekEnd = new Date(date);
   const diff = date.getDay() == 0 ? 7 : date.getDay();
-  startWeek.setDate(startWeek.getDate() - diff + 1);
-  endWeek.setDate(endWeek.getDate() + (7 - diff));
-  return [getDateAsStr(startWeek), getDateAsStr(endWeek)];
+  weekStart.setDate(weekStart.getDate() - diff + 1);
+  weekEnd.setDate(weekEnd.getDate() + (7 - diff));
+  return [getDateAsStr(weekStart), getDateAsStr(weekEnd)];
 }
 
 export function getNextDate(dateStr: string) {

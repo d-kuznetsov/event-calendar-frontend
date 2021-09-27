@@ -15,8 +15,8 @@
     </div>
     <Week
       :events="events"
-      :startWeek="period[0]"
-      :endWeek="period[1]"
+      :weekStart="period[0]"
+      :weekEnd="period[1]"
       class="Calendar__week"
       @eventClick="handleEventClick"
       @prev="onPrev"
