@@ -1,14 +1,20 @@
 <template>
   <div class="Navigation">
-    <button v-if="isLoggedIn" @click="handleLogoutClick">Logout</button>
+    <button v-if="isLoggedIn" class="btn-round" @click="handleLogoutClick">
+      <Logout />
+    </button>
   </div>
 </template>
 <script>
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "../store";
+import Logout from "../components/icon-buttons/Logout.vue";
 
 export default {
+  components: {
+    Logout,
+  },
   setup() {
     const store = useStore();
     const router = useRouter();

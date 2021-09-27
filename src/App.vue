@@ -27,14 +27,16 @@ export default {
 <style lang="postcss">
 .App {
   height: 100vh;
-  background: radial-gradient(#1d4ed8, #1e3a8a);
-
+  background: #eff6ff;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  /*   background: white; */
+  /*   background: radial-gradient(#1d4ed8, #1e3a8a); */
   &__container {
     display: flex;
     flex-direction: column;
     height: 100%;
     margin: 0 auto;
-    background: white;
+    box-shadow: 0 0 10px #374151;
     @media (min-width: $bp-xl) {
       max-width: $bp-xl;
     }
@@ -43,12 +45,12 @@ export default {
   &__header {
     flex: 0;
     min-height: 75px;
-    background: linear-gradient(90deg, #34d399, #059669);
   }
 
   &__content {
     flex: 1;
     overflow: auto;
+    background: white;
   }
 }
 </style>
