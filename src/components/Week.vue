@@ -32,7 +32,7 @@
 import { defineComponent, computed, PropType } from "vue";
 import { Event } from "../store/types";
 import { Range, getTimeStrByHour, getDayName } from "../lib/date-helper";
-import WeekDay from "./WeekDay.vue";
+import WeekDay from "./WeekDay";
 
 export default defineComponent({
   components: {

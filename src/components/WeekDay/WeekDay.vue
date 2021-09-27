@@ -1,9 +1,9 @@
 <template>
   <div class="WeekDay">
     <div class="WeekDay__grid">
-      <div v-for="h in 24" :key="h" class="WeekDay__gridItem" />
+      <div v-for="hour in 24" :key="hour" class="WeekDay__gridItem" />
     </div>
-    <div class="WeekDay__events" @click="handleClick">
+    <div class="WeekDay__events" @click="onEventClick">
       <div
         v-for="{
           event,
@@ -32,50 +32,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
-import { Event } from "../store/types";
-
-function toMinutes(timeStr: string) {
-  const [h, m] = timeStr.split(":");
-  return parseInt(h) * 60 + parseInt(m);
-}
-
-function getPctOfDur(start: string, end: string, dur: string = "24:00") {
-  const eventDur = toMinutes(end) - toMinutes(start);
-  const wholeDur = toMinutes(dur);
-  return Math.round((eventDur / wholeDur) * 10000) / 100;
-}
-
-class AreaManager {
-  readonly height: number;
-  readonly width: number;
-  readonly coordList: Array<{
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-  }>;
-
-  constructor(h: number = 100, w: number = 100) {
-    this.height = h;
-    this.width = w;
-    this.coordList = [];
-  }
-
-  add(x1: number, y1: number, x2: number, y2: number) {
-    this.coordList.push({
-      x1,
-      y1,
-      x2,
-      y2,
-    });
-  }
-
-  check(candX1: number, candY1: number, candX2: number, candY2: number) {
-    return this.coordList.every(({ x1, x2, y1, y2 }) => {
-      return candY2 <= y1 || candY1 >= y2 || candX1 >= x2 || candX2 <= x1;
-    });
-  }
-}
+import { getPercentageOfDur, AreaManager } from "./service";
+import { Event } from "../../store/types";
 
 export default defineComponent({
   props: {
@@ -108,8 +66,8 @@ export default defineComponent({
       return props.events
         .map((e, idx) => {
           const width = Math.floor(100 / (intersecs[idx] + 1));
-          const y1 = getPctOfDur("00:00", e.startTime);
-          const y2 = getPctOfDur("00:00", e.endTime);
+          const y1 = getPercentageOfDur("00:00", e.startTime);
+          const y2 = getPercentageOfDur("00:00", e.endTime);
           let x1 = 0;
           let x2 = width;
 
@@ -124,14 +82,14 @@ export default defineComponent({
             width: width,
             offsetLeft: x1,
             eventWrapHeight: y2,
-            eventHeight: getPctOfDur(e.startTime, e.endTime, e.endTime),
+            eventHeight: getPercentageOfDur(e.startTime, e.endTime, e.endTime),
           };
         })
         .reverse();
     });
 
     // TODO: Fix event type
-    const handleClick = (e: any) => {
+    const onEventClick = (e: any) => {
       const eventId = e.target?.dataset?.eventId;
       if (eventId) {
         const event = props.events.find((e) => e.id === eventId);
@@ -139,7 +97,7 @@ export default defineComponent({
       }
     };
 
-    return { enrichedEvents, handleClick };
+    return { enrichedEvents, onEventClick };
   },
 });
 </script>
@@ -149,17 +107,21 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   position: relative;
-  border-right: 1px solid #bbb;
+  border-right: 1px solid $clr-gray-300;
+
+  &:last-child {
+    border-right: transparent;
+  }
 
   &__grid {
     flex: 1;
-    width: 100%;
     display: flex;
     flex-direction: column;
+    width: 100%;
 
     &Item {
       flex: 1;
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid $clr-gray-200;
     }
   }
 
@@ -178,21 +140,26 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 0px 1px 1px 1px;
+    padding: 1px;
   }
 
   &__event {
-    width: 100%;
-    border: 1px solid #2563eb;
+    border: 2px solid $clr-amber-500;
     border-radius: 2px;
     background-image: repeating-linear-gradient(
       135deg,
-      #60a5fa,
-      #60a5fa 5%,
-      #3b82f6 5%,
-      #3b82f6 10%
+      $clr-amber-300,
+      $clr-amber-300 3%,
+      $clr-amber-500 3%,
+      $clr-amber-500 6%
     );
+    transition: border-color 0.75s, transform 0.75s;
     cursor: pointer;
+
+    &:hover {
+      transform: scale(1.02);
+      border-color: $clr-amber-700;
+    }
   }
 }
 </style>
