@@ -18,16 +18,13 @@ export default {
   components: {
     Header,
   },
-  setup() {
-    return {};
-  },
 };
 </script>
 
 <style lang="postcss">
 .App {
   height: 100vh;
-  background: #f0f9ff;
+  background: $clr-sky-50;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 
   &__container {
@@ -35,7 +32,8 @@ export default {
     flex-direction: column;
     height: 100%;
     margin: 0 auto;
-    box-shadow: 0 0 10px #0c4a6e;
+    box-shadow: 0 0 10px $clr-gray-900;
+
     @media (min-width: $bp-xl) {
       max-width: $bp-xl;
     }
@@ -44,7 +42,7 @@ export default {
   &__header {
     flex: 0;
     min-height: 50px;
-    background: radial-gradient(#0ea5e9, #075985);
+    background: radial-gradient($clr-sky-500, $clr-sky-900);
   }
 
   &__content {
