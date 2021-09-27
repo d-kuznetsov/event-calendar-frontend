@@ -26,28 +26,28 @@
 }
 
 .btn-round {
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  background-color: transparent;
+  background-color: #e0f2fe;
   border-color: transparent;
   height: 32px;
   width: 32px;
-  padding: 0px;
-  /*   border-top-color: #e5e7eb;
-  border-right-color: #e5e7eb;
-  border-bottom-color: #e5e7eb;
-  border-left-color: #e5e7eb; */
-}
-
-.btn-round:active {
-  background-color: #60a5fa;
-  border-color: #93c5fd;
+  padding: 2px;
+  transition: all 0.5;
 }
 
 .btn-round svg {
-  color: #1e42ab;
+  color: #0c4a6e;
   height: 32px;
   width: 32px;
+}
+
+.btn-round:hover {
+  background-color: #bae6fd;
+}
+
+.btn-round:active {
+  transform: scale(0.95);
 }
