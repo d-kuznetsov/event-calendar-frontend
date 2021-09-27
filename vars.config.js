@@ -1,12 +1,12 @@
-module.exports = {
-  // breakpoints
+const breakpoints = {
   "bp-sm": "640px",
   "bp-md": "768px",
   "bp-lg": "1024px",
   "bp-xl": "1280px",
   "bp-2xl": "1536px",
+};
 
-  // colors
+const colors = {
   "clr-sky-50": "#F0F9FF",
   "clr-sky-100": "#E0F2FE",
   "clr-sky-200": "#BAE6FD",
@@ -39,4 +39,18 @@ module.exports = {
   "clr-amber-700": "#B45309",
   "clr-amber-800": "#92400E",
   "clr-amber-900": "#78350F",
+};
+
+const spaces = {
+  "space-xs": "2px",
+  "space-sm": "4px",
+  "space-md": "8px",
+  "space-lg": "12px",
+  "space-xl": "16px",
+};
+
+module.exports = {
+  ...breakpoints,
+  ...colors,
+  ...spaces,
 };
