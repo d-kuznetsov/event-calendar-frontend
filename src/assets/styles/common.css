@@ -9,6 +9,9 @@
   margin-left: 4px;
   margin-right: 4px;
 }
+.ml-sm {
+  margin-left: 4px;
+}
 
 .flex {
   display: flex;
@@ -20,4 +23,31 @@
 
 .color-main {
   color: #1e42ab;
+}
+
+.btn-round {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: transparent;
+  border-color: transparent;
+  height: 32px;
+  width: 32px;
+  padding: 0px;
+  /*   border-top-color: #e5e7eb;
+  border-right-color: #e5e7eb;
+  border-bottom-color: #e5e7eb;
+  border-left-color: #e5e7eb; */
+}
+
+.btn-round:active {
+  background-color: #60a5fa;
+  border-color: #93c5fd;
+}
+
+.btn-round svg {
+  color: #1e42ab;
+  height: 32px;
+  width: 32px;
 }
