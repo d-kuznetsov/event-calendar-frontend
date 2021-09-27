@@ -2,7 +2,7 @@
   <div class="App">
     <div class="App__container">
       <div class="App__header">
-        <Navigation />
+        <Header />
       </div>
       <div class="App__content">
         <router-view />
@@ -12,11 +12,11 @@
 </template>
 
 <script lang="ts">
-import Navigation from "./components/Navigation.vue";
+import Header from "./components/Header.vue";
 
 export default {
   components: {
-    Navigation,
+    Header,
   },
   setup() {
     return {};
