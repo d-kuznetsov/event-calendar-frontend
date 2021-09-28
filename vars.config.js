@@ -39,6 +39,8 @@ const colors = {
   "clr-amber-700": "#B45309",
   "clr-amber-800": "#92400E",
   "clr-amber-900": "#78350F",
+
+  "clr-error": "#DC2626",
 };
 
 const spaces = {
