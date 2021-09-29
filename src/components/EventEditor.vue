@@ -1,46 +1,31 @@
 <template>
   <div class="EventEditor">
-    <div class="EventEditor__dialog">
+    <div class="EventEditor__dialog" ref="parent">
       <div class="EventEditor__toolbar">
-        <div class="EventEditor__iconWrap">
-          <Delete
-            @click="handleDelete"
-            class="color-main"
-            :width="iconSize"
-            :height="iconSize"
-          />
-        </div>
-        <div class="EventEditor__iconWrap">
-          <Done
-            @click="handleUpdate"
-            class="color-main"
-            :width="iconSize"
-            :height="iconSize"
-          />
-        </div>
-        <div class="EventEditor__iconWrap">
-          <Close
-            @click="handleClose"
-            class="color-main"
-            :width="iconSize"
-            :height="iconSize"
-          />
-        </div>
+        <button class="btn-round" @click="handleDelete">
+          <Delete />
+        </button>
+        <button class="btn-round ml-sm" @click="handleUpdate">
+          <Done />
+        </button>
+        <button class="btn-round ml-sm" @click="handleClose">
+          <Close />
+        </button>
       </div>
       <div class="EventEditor__content">
         <div class="flex mb-md">
-          <input type="date" v-model="date" class="flex-1" />
-          <input type="time" v-model="startTime" class="flex-1 mx-sm" />
-          <input type="time" v-model="endTime" class="flex-1" />
+          <input type="date" v-model="date" class="flex-1 input" />
+          <input type="time" v-model="startTime" class="flex-1 mx-sm input" />
+          <input type="time" v-model="endTime" class="flex-1 input" />
         </div>
-        <textarea v-model="content" />
+        <textarea v-model="content" class="input" />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, reactive, toRefs } from "vue";
+import { defineComponent, PropType, reactive, toRefs, ref } from "vue";
 import Close from "../components/icon-buttons/Close.vue";
 import Delete from "../components/icon-buttons/Delete.vue";
 import Done from "../components/icon-buttons/Done.vue";
@@ -61,6 +46,8 @@ export default defineComponent({
   setup(props, { emit }) {
     const editableEvent = reactive({ ...props.event });
     const iconSize = "24px";
+    const text = ref("text");
+    const parent = ref(null);
 
     const handleClose = () => {
       emit("close");
@@ -77,6 +64,8 @@ export default defineComponent({
       handleClose,
       handleUpdate,
       handleDelete,
+      text,
+      parent,
     };
   },
 });
@@ -97,35 +86,23 @@ export default defineComponent({
 
   &__dialog {
     width: 640px;
-    padding: 8px;
-    background-color: #fffbeb;
-    border-radius: 8px;
-    overflow: hidden;
+    padding: 0 $space-md;
+    background-color: $clr-amber-50;
+    border-radius: $space-md;
+    overflow: auto;
   }
 
   &__toolbar {
     display: flex;
     justify-content: flex-end;
-    border-bottom: 2px solid #ccc;
-    padding: 8px 0px;
-  }
-
-  &__iconWrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #bfdbfe;
-    border-radius: 50%;
-    height: 36px;
-    width: 36px;
-    margin-left: 4px;
-    cursor: pointer;
+    border-bottom: 2px solid $clr-gray-300;
+    padding: $space-md 0px;
   }
 
   &__content {
     display: flex;
     flex-direction: column;
-    padding: 8px 0px;
+    padding: $space-lg 0px;
   }
 }
 </style>

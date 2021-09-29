@@ -55,3 +55,14 @@
 .btn-round:active {
   transform: scale(0.95);
 }
+
+.input {
+  padding: $space-xs;
+  border: $space-xs solid $clr-gray-300;
+  border-radius: $space-sm;
+  font-size: 14px
+}
+
+.input:focus {
+  border-color: $clr-sky-300;
+}
