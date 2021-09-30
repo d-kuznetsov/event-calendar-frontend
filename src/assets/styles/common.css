@@ -29,6 +29,10 @@
   color: #1e42ab;
 }
 
+.w-full {
+  width: 100%;
+}
+
 .btn-round {
   display: inline-flex;
   justify-content: center;
@@ -60,9 +64,14 @@
   padding: $space-xs;
   border: $space-xs solid $clr-gray-300;
   border-radius: $space-sm;
-  font-size: 14px
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
 .input:focus {
   border-color: $clr-sky-300;
+}
+
+.input.input-error {
+  border-color: $clr-error;
 }
