@@ -38,7 +38,7 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  background-color: #e0f2fe;
+  background-color: $clr-sky-100;
   border-color: transparent;
   height: 32px;
   width: 32px;
@@ -47,17 +47,26 @@
 }
 
 .btn-round svg {
-  color: #0c4a6e;
+  color: $clr-sky-900;
   height: 32px;
   width: 32px;
 }
 
 .btn-round:hover {
-  background-color: #bae6fd;
+  background-color: $clr-sky-300;
 }
 
 .btn-round:active {
   transform: scale(0.95);
+}
+
+.btn-round[disabled] {
+  background-color: $clr-gray-200;
+  transform: scale(0.95);
+}
+
+.btn-round[disabled] svg {
+  color: $clr-gray-900;
 }
 
 .input {
