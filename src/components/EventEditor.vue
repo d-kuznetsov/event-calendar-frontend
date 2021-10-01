@@ -2,13 +2,13 @@
   <div class="EventEditor">
     <div class="EventEditor__dialog" ref="parent">
       <div class="EventEditor__toolbar">
-        <button v-if="event?.id" class="btn-round" @click="handleDelete">
-          <Delete />
-        </button>
-        <button class="btn-round ml-sm" @click="handleUpdate">
+        <button class="btn-round" @click="onUpdate">
           <Done />
         </button>
-        <button class="btn-round ml-sm" @click="handleClose">
+        <button v-if="event?.id" class="btn-round ml-sm" @click="onDelete">
+          <Delete />
+        </button>
+        <button class="btn-round ml-sm" @click="onClose">
           <Close />
         </button>
       </div>
@@ -19,49 +19,52 @@
               type="date"
               v-model="date"
               class="input w-full"
-              :class="{ 'input-error': dateErr }"
+              :class="{ 'input-error': errors.date }"
             />
-            <div class="EventEditor__errMessage">{{ dateErr }}</div>
+            <div class="EventEditor__errMessage">{{ errors.date }}</div>
           </div>
           <div class="flex-1 ml-sm">
             <input
               type="time"
               v-model="startTime"
               class="input w-full"
-              :class="{ 'input-error': startTimeErr }"
+              :class="{ 'input-error': errors.startTime }"
             />
-            <div class="EventEditor__errMessage">{{ startTimeErr }}</div>
+            <div class="EventEditor__errMessage">{{ errors.startTime }}</div>
           </div>
           <div class="flex-1 ml-sm">
             <input
               type="time"
               v-model="endTime"
               class="input w-full"
-              :class="{ 'input-error': endTimeErr }"
+              :class="{ 'input-error': errors.endTime }"
             />
-            <div class="EventEditor__errMessage">{{ endTimeErr }}</div>
+            <div class="EventEditor__errMessage">{{ errors.endTime }}</div>
           </div>
         </div>
         <textarea
           v-model="content"
           class="input"
-          :class="{ 'input-error': contentErr }"
+          :class="{ 'input-error': errors.content }"
           rows="4"
         />
-        <div class="EventEditor__errMessage">{{ contentErr }}</div>
+        <div class="EventEditor__errMessage">{{ errors.content }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, reactive, toRefs, ref } from "vue";
+import { defineComponent, PropType } from "vue";
 import Close from "../components/icon-buttons/Close.vue";
 import Delete from "../components/icon-buttons/Delete.vue";
 import Done from "../components/icon-buttons/Done.vue";
 import { Event } from "../store/types";
-import { useField } from "vee-validate";
-import { string } from "yup";
+import { useField, useForm } from "vee-validate";
+
+function checkRequiredField(val: string) {
+  return val && val.trim() != "" ? true : "Field is required";
+}
 
 export default defineComponent({
   components: {
@@ -75,40 +78,59 @@ export default defineComponent({
     },
   },
   emits: ["close", "update", "delete"],
-  setup(props, { emit }) {
-    const { value: date, errorMessage: dateErr } = useField(
-      "date",
-      string().required(),
-      {
-        initialValue: props.event?.date,
-      }
-    );
-    const { value: startTime, errorMessage: startTimeErr } = useField(
-      "startTime",
-      string().required(),
-      {
-        initialValue: props.event?.startTime,
-      }
-    );
-    const { value: endTime, errorMessage: endTimeErr } = useField(
-      "endTime",
-      string().required(),
-      {
-        initialValue: props.event?.endTime,
-      }
-    );
-    const { value: content, errorMessage: contentErr } = useField(
-      "content",
-      string().required(),
-      {
-        initialValue: props.event?.content,
-      }
-    );
 
-    const handleClose = () => {
+  setup(props, { emit }) {
+    const { handleSubmit, errors } = useForm({
+      validationSchema: {
+        date: checkRequiredField,
+        startTime(startTime: string, { form: { endTime } }) {
+          let result = checkRequiredField(startTime);
+          if (typeof result == "string") {
+            return result;
+          }
+          if (
+            checkRequiredField(endTime as string) === true &&
+            (endTime as string) < startTime
+          ) {
+            return "Invalid time range";
+          }
+          return true;
+        },
+        endTime(endTime: string, { form: { startTime } }) {
+          let result = checkRequiredField(endTime);
+          if (typeof result == "string") {
+            return result;
+          }
+          if (
+            checkRequiredField(startTime as string) === true &&
+            (startTime as string) >= endTime
+          ) {
+            return "Invalid time range";
+          }
+          return true;
+        },
+        content: checkRequiredField,
+      },
+      initialValues: {
+        date: props.event?.date,
+        startTime: props.event?.startTime,
+        endTime: props.event?.endTime,
+        content: props.event?.content,
+      },
+    });
+
+    const { value: date } = useField("date");
+    const { value: startTime } = useField("startTime");
+    const { value: endTime } = useField("endTime");
+    const { value: content } = useField("content");
+
+    const onClose = () => {
       emit("close");
     };
-    const handleUpdate = () => {
+    const onDelete = () => {
+      emit("delete", props.event?.id);
+    };
+    const onUpdate = handleSubmit(() => {
       emit("update", {
         ...props.event,
         date: date.value,
@@ -116,22 +138,17 @@ export default defineComponent({
         endTime: endTime.value,
         content: content.value,
       });
-    };
-    const handleDelete = () => {
-      emit("delete", props.event?.id);
-    };
+    });
+
     return {
       date,
-      dateErr,
       startTime,
-      startTimeErr,
       endTime,
-      endTimeErr,
       content,
-      contentErr,
-      handleClose,
-      handleUpdate,
-      handleDelete,
+      errors,
+      onClose,
+      onDelete,
+      onUpdate,
     };
   },
 });
