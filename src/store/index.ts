@@ -5,6 +5,7 @@ import { AxiosInstance } from "axios";
 import httpClient from "./http-client";
 import Service from "./service";
 import { getWeekPeriod, getNextDate, getPrevDate } from "../lib/date-helper";
+import { notifyError } from "../notification";
 
 export const key: InjectionKey = Symbol();
 
@@ -63,16 +64,40 @@ function createStore(service: IService, httpClient: AxiosInstance) {
     },
     actions: {
       register({ commit }, userData) {
-        return service.register(userData).then(({ name, token }) => {
-          commit("setToken", token);
-          commit("setUser", { name });
-        });
+        return service
+          .register(userData)
+          .then(({ name, token }) => {
+            commit("setToken", token);
+            commit("setUser", { name });
+            return true;
+          })
+          .catch((err) => {
+            const { status, data: message } = err.response;
+            if (status == 400 && message) {
+              notifyError(message);
+            } else {
+              notifyError("Something went wrong");
+            }
+            return false;
+          });
       },
       login({ commit }, credentials) {
-        return service.login(credentials).then(({ name, token }) => {
-          commit("setToken", token);
-          commit("setUser", { name });
-        });
+        return service
+          .login(credentials)
+          .then(({ name, token }) => {
+            commit("setToken", token);
+            commit("setUser", { name });
+            return true;
+          })
+          .catch((err) => {
+            const { status, data: message } = err.response;
+            if (status == 400 && message) {
+              notifyError(message);
+            } else {
+              notifyError("Something went wrong");
+            }
+            return false;
+          });
       },
       logout({ commit }) {
         commit("removeToken");
