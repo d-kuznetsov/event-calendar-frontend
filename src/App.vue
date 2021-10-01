@@ -1,5 +1,6 @@
 <template>
   <div class="App">
+    <notifications position="bottom right" classes="App__notification" />
     <div class="App__container">
       <div class="App__header">
         <Header />
@@ -49,6 +50,23 @@ export default {
     flex: 1;
     overflow: auto;
     background: white;
+  }
+
+  &__notification {
+    padding: $space-md;
+    margin: 0 $space-lg $space-lg 0;
+    border-left: 5px solid;
+    border-radius: 2px;
+    color: white;
+
+    .notification-title {
+      margin-bottom: $space-md;
+    }
+
+    &.error {
+      background: $clr-red-600;
+      border-color: $clr-red-800;
+    }
   }
 }
 </style>
