@@ -5,6 +5,10 @@
   margin-bottom: 8px;
 }
 
+.mb-lg {
+  margin-bottom: 12px;
+}
+
 .mx-sm {
   margin-left: 4px;
   margin-right: 4px;
@@ -73,7 +77,7 @@
   padding: $space-xs;
   border: $space-xs solid $clr-gray-300;
   border-radius: $space-sm;
-  font-size: 14px;
+  font-size: 16px;
   box-sizing: border-box;
 }
 
