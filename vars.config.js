@@ -40,6 +40,17 @@ const colors = {
   "clr-amber-800": "#92400E",
   "clr-amber-900": "#78350F",
 
+  "clr-red-50": "#FEF2F2",
+  "clr-red-100": "#FEE2E2",
+  "clr-red-200": "#FECACA",
+  "clr-red-300": "#FCA5A5",
+  "clr-red-400": "#F87171",
+  "clr-red-500": "#EF4444",
+  "clr-red-600": "#DC2626",
+  "clr-red-700": "#B91C1C",
+  "clr-red-800": "#991B1B",
+  "clr-red-900": "#7F1D1D",
+
   "clr-error": "#DC2626",
 };
 
