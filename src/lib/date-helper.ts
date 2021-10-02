@@ -1,12 +1,22 @@
+const dayNameformatter = new Intl.DateTimeFormat("en", {
+  weekday: "short",
+  day: "numeric",
+  month: "short",
+});
+
+export const getDayName = (dateStr: string) => {
+  return dayNameformatter.format(new Date(dateStr));
+};
+
 const dateFormatter = new Intl.DateTimeFormat("sv-SE", {
   year: "numeric",
   month: "2-digit",
   day: "2-digit",
 });
 
-export function getDateAsStr(date: Date) {
+export const getDateAsStr = (date: Date) => {
   return dateFormatter.format(date);
-}
+};
 
 export function getWeekPeriod(date: Date | string): [string, string] {
   if (typeof date === "string") {
@@ -36,16 +46,6 @@ export function getPrevDate(dateStr: string) {
 
 export function getTimeStrByHour(h: number) {
   return `0${h}:00`.slice(-5);
-}
-
-const formatter = new Intl.DateTimeFormat("en", {
-  weekday: "short",
-  day: "numeric",
-  month: "short",
-});
-
-export function getDayName(dateStr: string) {
-  return formatter.format(new Date(dateStr));
 }
 
 export class Range {

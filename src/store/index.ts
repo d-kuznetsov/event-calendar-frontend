@@ -119,4 +119,5 @@ function createStore(service: IService) {
   });
 }
 
-export const store = createStore(new Service(httpClient));
+const service = new Service(httpClient);
+export const store = createStore(service);

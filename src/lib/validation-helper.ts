@@ -14,7 +14,7 @@ export function createValidator(...validators: Validator[]) {
 }
 
 export function checkRequiredField(val: string) {
-  return val && val.trim() != "" ? true : "Field is required";
+  return val && val.trim() != "" ? true : "Required field";
 }
 
 export function checkEmail(val: string) {
@@ -24,5 +24,5 @@ export function checkEmail(val: string) {
 }
 
 export function checkPassword(val: string) {
-  return val.length >= 3 ? true : "Password should contaiin 4 or more symbols";
+  return val.length >= 3 ? true : "Password must be at least 3 characters";
 }
