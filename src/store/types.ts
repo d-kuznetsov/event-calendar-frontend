@@ -1,6 +1,8 @@
 import { InjectionKey as VueInjectionKey } from "vue";
 import { Store } from "vuex";
 
+export const TOKEN_KEY = "event-calendar-access-token";
+
 export interface User {
   name: string;
 }

@@ -1,7 +1,5 @@
 import { createStore as createVuexStore, useStore as baseUseStore } from "vuex";
-import createPersistedState from "vuex-persistedstate";
-import { InjectionKey, State, IService, Event } from "./types";
-import { AxiosInstance } from "axios";
+import { InjectionKey, State, IService, Event, TOKEN_KEY } from "./types";
 import httpClient from "./http-client";
 import Service from "./service";
 import { getWeekPeriod, getNextDate, getPrevDate } from "../lib/date-helper";
@@ -13,28 +11,19 @@ export function useStore() {
   return baseUseStore(key);
 }
 
-function createStore(service: IService, httpClient: AxiosInstance) {
-  httpClient.interceptors.request.use((config) => {
-    if (store.state.token) {
-      config.headers.Authorization = `Bearer ${store.state.token}`;
-    } else {
-      delete config.headers.Authorization;
-    }
-    return config;
-  });
-
-  const store = createVuexStore<State>({
+function createStore(service: IService) {
+  return createVuexStore<State>({
     state() {
       return {
         user: null,
         events: [],
-        token: null,
+        token: localStorage?.getItem(TOKEN_KEY) || null,
         period: getWeekPeriod(new Date()),
       };
     },
     getters: {
       isLoggedIn(state) {
-        return !!state.user;
+        return !!state.token;
       },
     },
     mutations: {
@@ -69,6 +58,7 @@ function createStore(service: IService, httpClient: AxiosInstance) {
           .then(({ name, token }) => {
             commit("setToken", token);
             commit("setUser", { name });
+            localStorage?.setItem(TOKEN_KEY, token);
             return true;
           })
           .catch((err) => {
@@ -87,6 +77,7 @@ function createStore(service: IService, httpClient: AxiosInstance) {
           .then(({ name, token }) => {
             commit("setToken", token);
             commit("setUser", { name });
+            localStorage?.setItem(TOKEN_KEY, token);
             return true;
           })
           .catch((err) => {
@@ -102,6 +93,7 @@ function createStore(service: IService, httpClient: AxiosInstance) {
       logout({ commit }) {
         commit("removeToken");
         commit("removeUser");
+        localStorage?.removeItem(TOKEN_KEY);
       },
       fetchEvents({ state, commit }) {
         const [start, end] = state.period;
@@ -119,13 +111,10 @@ function createStore(service: IService, httpClient: AxiosInstance) {
         return service.deleteEvent(id);
       },
     },
-    plugins: [createPersistedState()],
   });
-
-  return store;
 }
 
-export const store = createStore(new Service(httpClient), httpClient);
+export const store = createStore(new Service(httpClient));
 
 store.subscribe((m, s) => {
   console.log(m);
