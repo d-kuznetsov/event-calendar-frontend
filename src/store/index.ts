@@ -65,10 +65,10 @@ function createStore(service: IService) {
             const { status, data: message } = err.response;
             if (status == 400 && message) {
               notifyError(message);
-            } else {
-              notifyError("Something went wrong");
+              return false;
             }
-            return false;
+            notifyError("Something went wrong");
+            throw err;
           });
       },
       login({ commit }, credentials) {
@@ -84,10 +84,10 @@ function createStore(service: IService) {
             const { status, data: message } = err.response;
             if (status == 400 && message) {
               notifyError(message);
-            } else {
-              notifyError("Something went wrong");
+              return false;
             }
-            return false;
+            notifyError("Something went wrong");
+            throw err;
           });
       },
       logout({ commit }) {
@@ -97,18 +97,33 @@ function createStore(service: IService) {
       },
       fetchEvents({ state, commit }) {
         const [start, end] = state.period;
-        return service.fetchUserEvents(start, end).then((events) => {
-          commit("setEvents", events);
-        });
+        return service
+          .fetchUserEvents(start, end)
+          .then((events) => {
+            commit("setEvents", events);
+          })
+          .catch((err) => {
+            notifyError("Something went wrong");
+            throw err;
+          });
       },
       updateEvent(_, e: Event) {
-        return service.updateEvent(e);
+        return service.updateEvent(e).catch((err) => {
+          notifyError("Something went wrong");
+          throw err;
+        });
       },
       createEvent(_, e: Event) {
-        return service.createEvent(e);
+        return service.createEvent(e).catch((err) => {
+          notifyError("Something went wrong");
+          throw err;
+        });
       },
       deleteEvent(_, id: string) {
-        return service.deleteEvent(id);
+        return service.deleteEvent(id).catch((err) => {
+          notifyError("Something went wrong");
+          throw err;
+        });
       },
     },
   });
