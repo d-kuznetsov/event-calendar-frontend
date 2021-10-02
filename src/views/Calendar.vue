@@ -23,6 +23,7 @@
     <EventEditor
       v-if="isEditorOpen"
       :event="editableEvent"
+      :isSubmitting="isSubmitting"
       @close="closeEditor"
       @update="onEventUpdate"
       @delete="onEventDelete"
@@ -54,6 +55,7 @@ export default {
     const period = computed(() => store.state.period);
     const isEditorOpen = ref(false);
     const editableEvent = ref<Event | null>(null);
+    const isSubmitting = ref(false);
 
     watch(period, () => store.dispatch("fetchEvents"), { immediate: true });
 
@@ -75,27 +77,31 @@ export default {
       editableEvent.value = null;
     };
 
-    const onEventUpdate = (e: Event) => {
-      if (e.id) {
-        store.dispatch("updateEvent", e).then(() => {
-          store.dispatch("fetchEvents");
-          isEditorOpen.value = false;
-          editableEvent.value = null;
-        });
-      } else {
-        store.dispatch("createEvent", e).then(() => {
-          store.dispatch("fetchEvents");
-          isEditorOpen.value = false;
-          editableEvent.value = null;
-        });
-      }
-    };
-    const onEventDelete = (id: string) => {
-      store.dispatch("deleteEvent", id).then(() => {
+    const onEventUpdate = async (event: Event) => {
+      try {
+        isSubmitting.value = true;
+        if (event.id) {
+          await store.dispatch("updateEvent", event);
+        } else {
+          await store.dispatch("createEvent", event);
+        }
         store.dispatch("fetchEvents");
         isEditorOpen.value = false;
         editableEvent.value = null;
-      });
+      } finally {
+        isSubmitting.value = false;
+      }
+    };
+    const onEventDelete = async (id: string) => {
+      try {
+        isSubmitting.value = true;
+        await store.dispatch("deleteEvent", id);
+        store.dispatch("fetchEvents");
+        isEditorOpen.value = false;
+        editableEvent.value = null;
+      } finally {
+        isSubmitting.value = false;
+      }
     };
 
     const incrementWeek = () => {
@@ -110,6 +116,7 @@ export default {
       period,
       isEditorOpen,
       editableEvent,
+      isSubmitting,
       editEvent,
       closeEditor,
       addNewEvent,
