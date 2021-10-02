@@ -32,7 +32,7 @@
       :class="{
         'input-error': errors.password,
       }"
-      type="text"
+      type="password"
       placeholder="password"
     />
     <div class="EntryForm__errMessage">
