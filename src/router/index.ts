@@ -1,9 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { store } from "./store";
-import Home from "./views/Home.vue";
-import Register from "./views/Register.vue";
-import Login from "./views/Login.vue";
-import Calendar from "./views/Calendar.vue";
+import { store } from "../store";
+import Register from "../views/Register.vue";
+import Login from "../views/Login.vue";
+import Calendar from "../views/Calendar.vue";
 
 const isAuthenticated = () => {
   return store.getters.isLoggedIn;
@@ -12,8 +11,7 @@ const isAuthenticated = () => {
 const routes = [
   {
     path: "/",
-    component: Home,
-    meta: { requiresAuth: false },
+    redirect: "/login",
   },
   {
     path: "/register",
