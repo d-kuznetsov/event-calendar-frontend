@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "../store";
@@ -26,7 +26,7 @@ export default {
     const router = useRouter();
     const isSubmitting = ref(false);
 
-    const onSubmit = async (loginData) => {
+    const onSubmit = async (loginData: {}) => {
       try {
         isSubmitting.value = true;
         const isSuccessfully = await store.dispatch("login", loginData);

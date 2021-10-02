@@ -139,7 +139,7 @@ export default {
     flex: 0 0;
     display: flex;
     justify-content: space-between;
-    padding: 4px 8px;
+    padding: $space-sm $space-md;
   }
 
   &__week {

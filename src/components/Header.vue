@@ -38,6 +38,6 @@ export default {
   justify-content: flex-end;
   align-items: center;
   height: 100%;
-  padding: 4px 8px;
+  padding: $space-sm $space-md;
 }
 </style>

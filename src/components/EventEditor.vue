@@ -61,11 +61,11 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
+import { useField, useForm } from "vee-validate";
+import { Event } from "../store/types";
 import IconClose from "../components/icons/IconClose.vue";
 import IconDelete from "../components/icons/IconDelete.vue";
 import IconDone from "../components/icons/IconDone.vue";
-import { Event } from "../store/types";
-import { useField, useForm } from "vee-validate";
 
 interface ValidCtx {
   form: {
