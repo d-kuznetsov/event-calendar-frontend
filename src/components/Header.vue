@@ -1,19 +1,19 @@
 <template>
   <div class="Header">
     <button v-if="isLoggedIn" class="btn-round" @click="logout">
-      <Logout />
+      <IconLogout />
     </button>
   </div>
 </template>
-<script>
+<script lang="ts">
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "../store";
-import Logout from "./icons/Logout.vue";
+import IconLogout from "./icons/IconLogout.vue";
 
 export default {
   components: {
-    Logout,
+    IconLogout,
   },
   setup() {
     const store = useStore();

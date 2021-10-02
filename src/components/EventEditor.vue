@@ -3,7 +3,7 @@
     <div class="EventEditor__dialog" ref="parent">
       <div class="EventEditor__toolbar">
         <button class="btn-round" :disabled="isSubmitting" @click="onUpdate">
-          <Done />
+          <IconDone />
         </button>
         <button
           v-if="event?.id"
@@ -11,10 +11,10 @@
           class="btn-round ml-sm"
           @click="onDelete"
         >
-          <Delete />
+          <IconDelete />
         </button>
         <button class="btn-round ml-sm" @click="onClose">
-          <Close />
+          <IconClose />
         </button>
       </div>
       <div class="EventEditor__content">
@@ -61,9 +61,9 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import Close from "../components/icons/Close.vue";
-import Delete from "../components/icons/Delete.vue";
-import Done from "../components/icons/Done.vue";
+import IconClose from "../components/icons/IconClose.vue";
+import IconDelete from "../components/icons/IconDelete.vue";
+import IconDone from "../components/icons/IconDone.vue";
 import { Event } from "../store/types";
 import { useField, useForm } from "vee-validate";
 
@@ -80,9 +80,9 @@ function checkRequiredField(val: string) {
 
 export default defineComponent({
   components: {
-    Close,
-    Done,
-    Delete,
+    IconClose,
+    IconDone,
+    IconDelete,
   },
   props: {
     event: {

@@ -2,14 +2,14 @@
   <div class="Calendar">
     <div class="Calendar__toolbar">
       <button class="btn-round" @click="addNewEvent">
-        <Add />
+        <IconAdd />
       </button>
       <div>
         <button class="btn-round" @click="decrementWeek">
-          <Back />
+          <IconBack />
         </button>
         <button class="btn-round ml-sm" @click="incrementWeek">
-          <Forward />
+          <IconForward />
         </button>
       </div>
     </div>
@@ -37,17 +37,17 @@ import { useStore } from "../store";
 import { Event } from "../store/types";
 import Week from "../components/Week.vue";
 import EventEditor from "../components/EventEditor.vue";
-import Add from "../components/icons/Add.vue";
-import Back from "../components/icons/Back.vue";
-import Forward from "../components/icons/Forward.vue";
+import IconAdd from "../components/icons/IconAdd.vue";
+import IconBack from "../components/icons/IconBack.vue";
+import IconForward from "../components/icons/IconForward.vue";
 
 export default {
   components: {
     Week,
     EventEditor,
-    Add,
-    Back,
-    Forward,
+    IconAdd,
+    IconBack,
+    IconForward,
   },
   setup() {
     const store = useStore();
