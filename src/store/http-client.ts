@@ -2,8 +2,8 @@ import axios from "axios";
 import { TOKEN_KEY } from "./types";
 
 const httpClient = axios.create({
-  baseURL: "http://localhost:8080/",
-  timeout: 10000,
+  baseURL: import.meta.env.VITE_SERVICE_URL as string,
+  timeout: 5000,
 });
 
 httpClient.interceptors.request.use((config) => {
