@@ -2,10 +2,15 @@
   <div class="EventEditor">
     <div class="EventEditor__dialog" ref="parent">
       <div class="EventEditor__toolbar">
-        <button class="btn-round" @click="onUpdate">
+        <button class="btn-round" :disabled="isSubmitting" @click="onUpdate">
           <Done />
         </button>
-        <button v-if="event?.id" class="btn-round ml-sm" @click="onDelete">
+        <button
+          v-if="event?.id"
+          :disabled="isSubmitting"
+          class="btn-round ml-sm"
+          @click="onDelete"
+        >
           <Delete />
         </button>
         <button class="btn-round ml-sm" @click="onClose">
@@ -75,6 +80,10 @@ export default defineComponent({
   props: {
     event: {
       type: Object as PropType<Event>,
+    },
+    isSubmitting: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ["close", "update", "delete"],
