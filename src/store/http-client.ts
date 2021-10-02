@@ -16,4 +16,15 @@ httpClient.interceptors.request.use((config) => {
   return config;
 });
 
+httpClient.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    if (err.response.status == 401) {
+      localStorage.removeItem(TOKEN_KEY);
+      setTimeout(() => location?.replace(`${location.origin}/login`));
+    }
+    return Promise.reject(err);
+  }
+);
+
 export default httpClient;
