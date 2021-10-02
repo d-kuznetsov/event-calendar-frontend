@@ -64,9 +64,9 @@ export default {
     const addNewEvent = () => {
       isEditorOpen.value = true;
       editableEvent.value = {
-        date: "",
-        startTime: "",
-        endTime: "",
+        date: period.value[0],
+        startTime: "12:00",
+        endTime: "13:00",
         content: "",
       } as Event;
     };
