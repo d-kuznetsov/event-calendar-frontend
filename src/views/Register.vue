@@ -1,11 +1,17 @@
 <template>
   <div class="Register">
-    <EntryForm @submit="onSubmit" class="mb-lg" />
-    <router-link to="/login"> Already have an account? Login. </router-link>
+    <EntryForm
+      buttonLabel="Sign Up"
+      :isSubmitting="isSubmitting"
+      @submit="onSubmit"
+      class="mb-lg"
+    />
+    <router-link to="/login"> Already have an account? Log In. </router-link>
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "../store";
 import EntryForm from "../components/EntryForm.vue";
@@ -17,15 +23,22 @@ export default {
   setup() {
     const store = useStore();
     const router = useRouter();
+    const isSubmitting = ref(false);
 
     const onSubmit = async (registerData) => {
-      const isSuccessfully = await store.dispatch("register", registerData);
-      if (isSuccessfully) {
-        router.push("/calendar");
+      try {
+        isSubmitting.value = true;
+        const isSuccessfully = await store.dispatch("register", registerData);
+        if (isSuccessfully) {
+          router.push("/calendar");
+        }
+      } finally {
+        isSubmitting.value = false;
       }
     };
 
     return {
+      isSubmitting,
       onSubmit,
     };
   },

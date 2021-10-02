@@ -2,8 +2,11 @@
   <form action="" class="EntryForm" @submit.prevent="onSubmit">
     <template v-if="hasName">
       <input
-        v-model="name"
+        v-model.lazy="name"
         class="input w-full"
+        :class="{
+          'input-error': errors.name,
+        }"
         type="text"
         placeholder="name"
       />
@@ -12,8 +15,11 @@
       </div>
     </template>
     <input
-      v-model="email"
+      v-model.lazy="email"
       class="input w-full"
+      :class="{
+        'input-error': errors.email,
+      }"
       type="text"
       placeholder="email"
     />
@@ -21,15 +27,20 @@
       {{ errors.email }}
     </div>
     <input
-      v-model="password"
+      v-model.lazy="password"
       class="input w-full"
+      :class="{
+        'input-error': errors.password,
+      }"
       type="text"
       placeholder="password"
     />
     <div class="EntryForm__errMessage">
       {{ errors.password }}
     </div>
-    <button class="EntryForm__submitBtn" type="submit">Ok</button>
+    <button :disabled="isSubmitting" class="EntryForm__submitBtn" type="submit">
+      {{ buttonLabel }}
+    </button>
   </form>
 </template>
 
@@ -48,6 +59,14 @@ export default defineComponent({
     hasName: {
       type: Boolean,
       default: true,
+    },
+    buttonLabel: {
+      type: String,
+      default: "Ok",
+    },
+    isSubmitting: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ["submit"],
@@ -111,6 +130,18 @@ export default defineComponent({
     &:active {
       transform: scale(0.99);
       background: $clr-sky-500;
+    }
+
+    &:disabled {
+      background-image: repeating-linear-gradient(
+        135deg,
+        $clr-sky-300,
+        $clr-sky-300 5%,
+        $clr-sky-500 5%,
+        $clr-sky-500 10%
+      );
+      border-color: $clr-sky-700;
+      transform: scale(0.99);
     }
   }
 }
