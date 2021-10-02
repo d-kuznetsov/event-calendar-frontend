@@ -9,7 +9,7 @@
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "../store";
-import Logout from "./icon-buttons/Logout.vue";
+import Logout from "./icons/Logout.vue";
 
 export default {
   components: {

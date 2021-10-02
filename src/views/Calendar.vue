@@ -37,9 +37,9 @@ import { useStore } from "../store";
 import { Event } from "../store/types";
 import Week from "../components/Week.vue";
 import EventEditor from "../components/EventEditor.vue";
-import Add from "../components/icon-buttons/Add.vue";
-import Back from "../components/icon-buttons/Back.vue";
-import Forward from "../components/icon-buttons/Forward.vue";
+import Add from "../components/icons/Add.vue";
+import Back from "../components/icons/Back.vue";
+import Forward from "../components/icons/Forward.vue";
 
 export default {
   components: {

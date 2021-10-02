@@ -61,11 +61,18 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import Close from "../components/icon-buttons/Close.vue";
-import Delete from "../components/icon-buttons/Delete.vue";
-import Done from "../components/icon-buttons/Done.vue";
+import Close from "../components/icons/Close.vue";
+import Delete from "../components/icons/Delete.vue";
+import Done from "../components/icons/Done.vue";
 import { Event } from "../store/types";
 import { useField, useForm } from "vee-validate";
+
+interface ValidCtx {
+  form: {
+    startTime: string;
+    endTime: string;
+  };
+}
 
 function checkRequiredField(val: string) {
   return val && val.trim() != "" ? true : "Field is required";
@@ -79,7 +86,7 @@ export default defineComponent({
   },
   props: {
     event: {
-      type: Object as PropType<Event>,
+      type: Object as PropType<Event | null>,
     },
     isSubmitting: {
       type: Boolean,
@@ -92,7 +99,7 @@ export default defineComponent({
     const { handleSubmit, errors } = useForm({
       validationSchema: {
         date: checkRequiredField,
-        startTime(startTime: string, { form: { endTime } }) {
+        startTime(startTime: string, { form: { endTime } }: ValidCtx) {
           let result = checkRequiredField(startTime);
           if (typeof result == "string") {
             return result;
@@ -105,7 +112,7 @@ export default defineComponent({
           }
           return true;
         },
-        endTime(endTime: string, { form: { startTime } }) {
+        endTime(endTime: string, { form: { startTime } }: ValidCtx) {
           let result = checkRequiredField(endTime);
           if (typeof result == "string") {
             return result;
@@ -128,10 +135,10 @@ export default defineComponent({
       },
     });
 
-    const { value: date } = useField("date");
-    const { value: startTime } = useField("startTime");
-    const { value: endTime } = useField("endTime");
-    const { value: content } = useField("content");
+    const { value: date } = useField<string>("date");
+    const { value: startTime } = useField<string>("startTime");
+    const { value: endTime } = useField<string>("endTime");
+    const { value: content } = useField<string>("content");
 
     const onClose = () => {
       emit("close");
