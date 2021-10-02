@@ -96,7 +96,7 @@ $time-block-width: 45px;
     display: flex;
     justify-content: flex-end;
     padding: 4px 0px 4px $time-block-width;
-    border-bottom: 1px solid $clr-gray-200;
+    border-bottom: 1px solid $color-gray-200;
     font-size: 12px;
     font-weight: 500;
   }
@@ -104,7 +104,7 @@ $time-block-width: 45px;
   &__dayName {
     flex: 1;
     text-align: center;
-    color: $clr-gray-900;
+    color: $color-gray-900;
   }
 
   &__days {
@@ -127,9 +127,9 @@ $time-block-width: 45px;
     justify-content: center;
     align-items: center;
     width: $time-block-width;
-    border-bottom: 1px solid $clr-gray-200;
-    border-right: 1px solid $clr-gray-300;
-    color: $clr-gray-500;
+    border-bottom: 1px solid $color-gray-200;
+    border-right: 1px solid $color-gray-300;
+    color: $color-gray-500;
     font-size: 11px;
     font-weight: 500;
   }

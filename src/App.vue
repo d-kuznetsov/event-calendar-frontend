@@ -23,9 +23,12 @@ export default {
 </script>
 
 <style lang="postcss">
+@import "./assets/styles/reset.css";
+@import "./assets/styles/common.css";
+
 .App {
   height: 100vh;
-  background: $clr-sky-50;
+  background: $color-sky-50;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 
   &__container {
@@ -33,7 +36,7 @@ export default {
     flex-direction: column;
     height: 100%;
     margin: 0 auto;
-    box-shadow: 0 0 10px $clr-gray-900;
+    box-shadow: 0 0 10px $color-gray-900;
 
     @media (min-width: $bp-xl) {
       max-width: $bp-xl;
@@ -43,7 +46,7 @@ export default {
   &__header {
     flex: 0;
     min-height: 50px;
-    background: radial-gradient($clr-sky-500, $clr-sky-900);
+    background: radial-gradient($color-sky-500, $color-sky-900);
   }
 
   &__content {
@@ -56,7 +59,7 @@ export default {
     padding: $space-md;
     margin: 0 $space-lg $space-lg 0;
     border-left: 5px solid;
-    border-radius: 2px;
+    border-radius: 4px;
     color: white;
 
     .notification-title {
@@ -64,8 +67,8 @@ export default {
     }
 
     &.error {
-      background: $clr-red-600;
-      border-color: $clr-red-800;
+      background: $color-red-600;
+      border-color: $color-red-800;
     }
   }
 }

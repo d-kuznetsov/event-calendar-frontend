@@ -179,7 +179,7 @@ export default defineComponent({
   &__dialog {
     width: 640px;
     padding: 0 $space-md;
-    background-color: $clr-amber-50;
+    background-color: $color-amber-50;
     border-radius: $space-md;
     overflow: auto;
   }
@@ -187,7 +187,7 @@ export default defineComponent({
   &__toolbar {
     display: flex;
     justify-content: flex-end;
-    border-bottom: 2px solid $clr-gray-300;
+    border-bottom: 2px solid $color-gray-300;
     padding: $space-md 0px;
   }
 
@@ -200,7 +200,7 @@ export default defineComponent({
   &__errMessage {
     display: flex;
     align-items: center;
-    color: $clr-error;
+    color: $color-error;
     font-size: 11px;
     height: 14px;
   }

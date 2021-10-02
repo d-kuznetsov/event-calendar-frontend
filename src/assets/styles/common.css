@@ -1,90 +1,77 @@
 .mb-sm {
-  margin-bottom: 4px;
+  margin-bottom: $space-sm;
 }
 .mb-md {
-  margin-bottom: 8px;
+  margin-bottom: $space-md;
 }
-
 .mb-lg {
-  margin-bottom: 12px;
-}
-
-.mx-sm {
-  margin-left: 4px;
-  margin-right: 4px;
+  margin-bottom: $space-lg;
 }
 .ml-sm {
-  margin-left: 4px;
+  margin-left: $space-sm;
 }
-
 .ml-md {
-  margin-left: 8px;
+  margin-left: $space-sm;
+}
+.mx-sm {
+  margin-left: $space-sm;
+  margin-right: $space-sm;
 }
 
 .flex {
   display: flex;
 }
-
 .flex-1 {
   flex: 1 1 0%;
-}
-
-.color-main {
-  color: #1e42ab;
 }
 
 .w-full {
   width: 100%;
 }
 
+$btn-round-size: 32px;
 .btn-round {
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  height: $btn-round-size;
+  width: $btn-round-size;
+  padding: $space-xs;
   border-radius: 50%;
-  background-color: $clr-sky-100;
+  background-color: $color-sky-100;
   border-color: transparent;
-  height: 32px;
-  width: 32px;
-  padding: 2px;
   transition: all 0.5;
 }
-
 .btn-round svg {
-  color: $clr-sky-900;
-  height: 32px;
-  width: 32px;
+  color: $color-sky-900;
+  height: $btn-round-size;
+  width: $btn-round-size;
 }
-
 .btn-round:hover {
-  background-color: $clr-sky-300;
+  background-color: $color-sky-300;
 }
-
 .btn-round:active {
   transform: scale(0.95);
 }
 
 .btn-round[disabled] {
-  background-color: $clr-gray-200;
+  background-color: $color-gray-200;
   transform: scale(0.95);
 }
-
 .btn-round[disabled] svg {
-  color: $clr-gray-900;
+  color: $color-gray-900;
 }
 
 .input {
+  box-sizing: border-box;
   padding: $space-xs;
-  border: $space-xs solid $clr-gray-300;
+  border: $space-xs solid $color-gray-300;
   border-radius: $space-sm;
   font-size: 16px;
-  box-sizing: border-box;
 }
-
 .input:focus {
-  border-color: $clr-sky-300;
+  border-color: $color-sky-300;
 }
-
 .input.input-error {
-  border-color: $clr-error;
+  border-color: $color-error;
 }

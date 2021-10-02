@@ -107,7 +107,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   position: relative;
-  border-right: 1px solid $clr-gray-300;
+  border-right: 1px solid $color-gray-300;
 
   &:last-child {
     border-right: transparent;
@@ -121,7 +121,7 @@ export default defineComponent({
 
     &Item {
       flex: 1;
-      border-bottom: 1px solid $clr-gray-200;
+      border-bottom: 1px solid $color-gray-200;
     }
   }
 
@@ -144,21 +144,21 @@ export default defineComponent({
   }
 
   &__event {
-    border: 2px solid $clr-amber-500;
+    border: 2px solid $color-amber-500;
     border-radius: 2px;
     background-image: repeating-linear-gradient(
       135deg,
-      $clr-amber-300,
-      $clr-amber-300 3%,
-      $clr-amber-500 3%,
-      $clr-amber-500 6%
+      $color-amber-300,
+      $color-amber-300 3%,
+      $color-amber-500 3%,
+      $color-amber-500 6%
     );
     transition: border-color 0.75s, transform 0.75s;
     cursor: pointer;
 
     &:hover {
       transform: scale(1.02);
-      border-color: $clr-amber-700;
+      border-color: $color-amber-700;
     }
   }
 }

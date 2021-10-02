@@ -112,14 +112,14 @@ export default defineComponent({
   width: 360px;
 
   &__errMessage {
-    color: $clr-error;
+    color: $color-error;
     font-size: 11px;
     height: 14px;
   }
 
   &__submitBtn {
     width: 100%;
-    background: $clr-sky-600;
+    background: $color-sky-600;
     font-size: 16px;
     color: white;
     font-weight: 500;
@@ -129,18 +129,18 @@ export default defineComponent({
 
     &:active {
       transform: scale(0.99);
-      background: $clr-sky-500;
+      background: $color-sky-500;
     }
 
     &:disabled {
       background-image: repeating-linear-gradient(
         135deg,
-        $clr-sky-300,
-        $clr-sky-300 5%,
-        $clr-sky-500 5%,
-        $clr-sky-500 10%
+        $color-sky-300,
+        $color-sky-300 5%,
+        $color-sky-500 5%,
+        $color-sky-500 10%
       );
-      border-color: $clr-sky-700;
+      border-color: $color-sky-700;
       transform: scale(0.99);
     }
   }
