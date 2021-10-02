@@ -15,7 +15,6 @@ function createStore(service: IService) {
   return createVuexStore<State>({
     state() {
       return {
-        user: null,
         events: [],
         token: localStorage?.getItem(TOKEN_KEY) || null,
         period: getWeekPeriod(new Date()),
@@ -27,12 +26,6 @@ function createStore(service: IService) {
       },
     },
     mutations: {
-      setUser(state, user) {
-        state.user = user;
-      },
-      removeUser(state) {
-        state.user = null;
-      },
       setToken(state, token) {
         state.token = token;
       },
@@ -55,9 +48,8 @@ function createStore(service: IService) {
       register({ commit }, userData) {
         return service
           .register(userData)
-          .then(({ name, token }) => {
+          .then(({ token }) => {
             commit("setToken", token);
-            commit("setUser", { name });
             localStorage?.setItem(TOKEN_KEY, token);
             return true;
           })
@@ -74,9 +66,8 @@ function createStore(service: IService) {
       login({ commit }, credentials) {
         return service
           .login(credentials)
-          .then(({ name, token }) => {
+          .then(({ token }) => {
             commit("setToken", token);
-            commit("setUser", { name });
             localStorage?.setItem(TOKEN_KEY, token);
             return true;
           })
@@ -92,13 +83,12 @@ function createStore(service: IService) {
       },
       logout({ commit }) {
         commit("removeToken");
-        commit("removeUser");
         localStorage?.removeItem(TOKEN_KEY);
       },
       fetchEvents({ state, commit }) {
         const [start, end] = state.period;
         return service
-          .fetchUserEvents(start, end)
+          .fetchEvents(start, end)
           .then((events) => {
             commit("setEvents", events);
           })
@@ -130,8 +120,3 @@ function createStore(service: IService) {
 }
 
 export const store = createStore(new Service(httpClient));
-
-store.subscribe((m, s) => {
-  console.log(m);
-  console.log(JSON.stringify(s, null, 2));
-});
