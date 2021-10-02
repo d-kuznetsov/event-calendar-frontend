@@ -62,6 +62,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { useField, useForm } from "vee-validate";
+import { checkRequiredField } from "../lib/validation-helper";
 import { Event } from "../store/types";
 import IconClose from "../components/icons/IconClose.vue";
 import IconDelete from "../components/icons/IconDelete.vue";
@@ -72,10 +73,6 @@ interface ValidCtx {
     startTime: string;
     endTime: string;
   };
-}
-
-function checkRequiredField(val: string) {
-  return val && val.trim() != "" ? true : "Field is required";
 }
 
 export default defineComponent({
